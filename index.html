@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aprende inteligencia artificial con Impulso IA. Descubre herramientas gratuitas, tutoriales y recursos para tus proyectos digitales.">
+  <meta name="theme-color" content="#0b1020">
+  <title>Impulso IA | Aprende, crea y crece</title>
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1020;
+      color: #f1f5f9;
+      line-height: 1.7;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1080px, 90%); margin: auto; }
+    header {
+      position: sticky; top: 0; z-index: 10;
+      background: #0b1020ee;
+      border-bottom: 1px solid #26334c;
+      backdrop-filter: blur(12px);
+    }
+    nav {
+      min-height: 72px;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 20px;
+    }
+    .logo { font-size: 22px; font-weight: 800; color: #60a5fa; }
+    .links { display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; }
+    .links a:hover { color: #60a5fa; }
+    .hero { padding: 95px 0 85px; text-align: center; }
+    .tag {
+      display: inline-block; padding: 6px 14px;
+      border: 1px solid #31518b; border-radius: 30px;
+      color: #93c5fd; font-size: 13px;
+    }
+    h1 { font-size: clamp(38px, 7vw, 68px); line-height: 1.12; margin: 24px 0; }
+    h2 { font-size: clamp(26px, 4vw, 38px); line-height: 1.25; }
+    .gradient {
+      background: linear-gradient(90deg, #60a5fa, #c084fc);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+    }
+    .intro { max-width: 650px; margin: 0 auto 28px; color: #b8c4d8; }
+    .button {
+      display: inline-block; padding: 12px 20px;
+      background: #2563eb; color: white;
+      border-radius: 9px; font-weight: bold; margin: 5px;
+    }
+    .button:hover { background: #1d4ed8; }
+    .button.secondary { background: #172033; border: 1px solid #34445f; }
+    section { padding: 65px 0; }
+    .section-intro { color: #aab7cb; max-width: 650px; }
+    .grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 18px; margin-top: 28px;
+    }
+    .card {
+      padding: 24px; border: 1px solid #26334c;
+      border-radius: 16px; background: #111a2d;
+    }
+    .card .icon { font-size: 30px; }
+    .card p { color: #b8c4d8; font-size: 15px; }
+    .card a { color: #93c5fd; font-weight: bold; }
+    .label { color: #60a5fa; font-size: 12px; font-weight: bold; }
+    .highlight {
+      background: linear-gradient(135deg, #14264a, #17152f);
+      border: 1px solid #34445f; border-radius: 20px;
+      padding: 32px;
+    }
+    .steps { padding-left: 22px; color: #c6d1e2; }
+    footer {
+      padding: 30px 0; border-top: 1px solid #26334c;
+      color: #94a3b8; font-size: 13px;
+    }
+    @media (max-width: 700px) {
+      .grid { grid-template-columns: 1fr; }
+      nav { padding: 14px 0; align-items: flex-start; flex-direction: column; }
+      .links { gap: 12px; }
+      .hero { padding: 65px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <a class="logo" href="#inicio">✦ IMPULSO IA</a>
+      <div class="links">
+        <a href="#herramientas">Herramientas</a>
+        <a href="#guias">Guías</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#contacto">Contacto</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container" id="inicio">
+      <span class="tag">TECNOLOGÍA · CREATIVIDAD · FUTURO</span>
+      <h1>Haz más con la<br><span class="gradient">inteligencia artificial.</span></h1>
+      <p class="intro">
+        Descubre herramientas, aprende nuevas habilidades y convierte
+        tus ideas en proyectos digitales. La tecnología puede ser
+        más sencilla de lo que imaginas.
+      </p>
+      <a class="button" href="#herramientas">Explorar herramientas →</a>
+      <a class="button secondary" href="#guias">Aprender gratis</a>
+    </section>
+
+    <section id="herramientas">
+      <div class="container">
+        <span class="label">EMPIEZA AQUÍ</span>
+        <h2>Herramientas que vale la pena conocer</h2>
+        <p class="section-intro">
+          Recursos conocidos para estudiar, investigar y desarrollar
+          proyectos. Comprueba las condiciones de cada servicio.
+        </p>
+        <div class="grid">
+          <article class="card">
+            <div class="icon">🤖</div>
+            <h3>ChatGPT</h3>
+            <p>Explora ideas, comprende conceptos y prepara borradores
+              con ayuda de inteligencia artificial.</p>
+            <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">Visitar herramienta →</a>
+          </article>
+          <article class="card">
+            <div class="icon">🎨</div>
+            <h3>Canva</h3>
+            <p>Crea diseños, presentaciones y materiales visuales
+              para tus proyectos.</p>
+            <a href="https://www.canva.com/" target="_blank" rel="noopener noreferrer">Visitar herramienta →</a>
+          </article>
+          <article class="card">
+            <div class="icon">💻</div>
+            <h3>GitHub</h3>
+            <p>Aprende sobre programación y descubre proyectos
+              tecnológicos de la comunidad.</p>
+            <a href="https://github.com/" target="_blank" rel="noopener noreferrer">Visitar herramienta →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="guias">
+      <div class="container">
+        <span class="label">APRENDE A TU RITMO</span>
+        <h2>Guías prácticas de inteligencia artificial</h2>
+        <div class="grid">
+          <article class="card">
+            <div class="icon">✍️</div>
+            <h3>Cómo escribir mejores instrucciones para una IA</h3>
+            <p>Explica tu objetivo, aporta contexto, indica el formato
+              que necesitas y mejora el resultado con preguntas.</p>
+          </article>
+          <article class="card">
+            <div class="icon">📚</div>
+            <h3>Cómo estudiar con inteligencia artificial</h3>
+            <p>Pide explicaciones paso a paso, ejercicios de práctica
+              y preguntas para comprobar lo que has aprendido.</p>
+          </article>
+          <article class="card">
+            <div class="icon">📱</div>
+            <h3>Ideas de contenido para redes sociales</h3>
+            <p>Organiza temas, prepara calendarios de publicaciones
+              y adapta tus mensajes a cada audiencia.</p>
+          </article>
+        </div>
+        <p class="section-intro">
+          Estas son introducciones. Iremos desarrollando cada tema
+          con ejemplos originales y tutoriales más completos.
+        </p>
+      </div>
+    </section>
+
+    <section id="servicios">
+      <div class="container">
+        <div class="highlight">
+          <span class="label">PROYECTOS DIGITALES</span>
+          <h2>¿Necesitas ayuda con tu contenido?</h2>
+          <p class="section-intro">
+            Estoy desarrollando recursos para ayudar a pequeños negocios
+            a organizar sus ideas y mejorar su presencia digital.
+          </p>
+          <div class="grid">
+            <article class="card">
+              <h3>Ideas para publicaciones</h3>
+              <p>Listas de temas adaptadas a la actividad de un negocio.</p>
+            </article>
+            <article class="card">
+              <h3>Textos para redes</h3>
+              <p>Borradores de textos que el cliente puede revisar y adaptar.</p>
+            </article>
+            <article class="card">
+              <h3>Calendarios de contenido</h3>
+              <p>Una planificación sencilla de temas y fechas de publicación.</p>
+            </article>
+          </div>
+          <p>¿Te interesa alguno de estos servicios? Próximamente añadiremos
+            una forma de contacto para solicitar información.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <div class="container">
+        <h2>Seguimos aprendiendo</h2>
+        <p class="section-intro">
+          Impulso IA comparte recursos educativos sobre tecnología.
+          El sitio irá creciendo con nuevas guías y proyectos.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 Impulso IA · Proyecto educativo independiente.</p>
+      <p>Las herramientas mencionadas pertenecen a sus respectivos propietarios.
+        Sus funciones y condiciones pueden cambiar.</p>
+    </div>
+  </footer>
+</body>
+</html>
