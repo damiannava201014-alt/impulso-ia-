@@ -11,6 +11,136 @@
   <style>
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    
+<style>
+  #impulso-chat-btn {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 9999;
+    padding: 15px 20px;
+    border: 0;
+    border-radius: 30px;
+    background: #6c4cff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 18px #0003;
+  }
+  #impulso-chat {
+    position: fixed;
+    right: 22px;
+    bottom: 85px;
+    z-index: 9999;
+    width: min(350px, calc(100vw - 32px));
+    height: 430px;
+    background: white;
+    color: #222;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px #0003;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+  }
+  #impulso-chat header {
+    background: #6c4cff;
+    color: white;
+    padding: 16px;
+    font-weight: bold;
+  }
+  #impulso-mensajes {
+    padding: 12px;
+    flex: 1;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-size: 14px;
+  }
+  #impulso-form {
+    display: flex;
+    padding: 10px;
+    gap: 8px;
+    border-top: 1px solid #ddd;
+  }
+  #impulso-entrada {
+    min-width: 0;
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  #impulso-form button {
+    border: 0;
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    background: #6c4cff;
+    cursor: pointer;
+  }
+</style>
+
+<button id="impulso-chat-btn" type="button">💬 Habla con Impulso IA</button>
+
+<section id="impulso-chat">
+  <header>✨ Impulso IA <span style="float:right;cursor:pointer" id="impulso-cerrar">✕</span></header>
+  <div id="impulso-mensajes">¡Hola! Soy Impulso IA. ¿En qué puedo ayudarte?</div>
+  <form id="impulso-form">
+    <input id="impulso-entrada" placeholder="Escribe tu pregunta..." required>
+    <button type="submit">Enviar</button>
+  </form>
+</section>
+
+<script>
+(() => {
+  const API = "https://impulso-ia-api.damiannava201014.workers.dev";
+  const panel = document.getElementById("impulso-chat");
+  const mensajes = document.getElementById("impulso-mensajes");
+  const entrada = document.getElementById("impulso-entrada");
+
+  document.getElementById("impulso-chat-btn").onclick = () => {
+    panel.style.display = "flex";
+  };
+  document.getElementById("impulso-cerrar").onclick = () => {
+    panel.style.display = "none";
+  };
+
+  document.getElementById("impulso-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const mensaje = entrada.value.trim();
+    if (!mensaje) return;
+
+    mensajes.textContent += "\n\nTú: " + mensaje + "\n\nImpulso IA: Pensando...";
+    entrada.value = "";
+    mensajes.scrollTop = mensajes.scrollHeight;
+
+    try {
+      const respuesta = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensaje })
+      });
+      const datos = await respuesta.json();
+
+      if (!respuesta.ok) throw new Error(datos.error || "Error del servidor");
+
+      mensajes.textContent = mensajes.textContent.replace(
+        "Impulso IA: Pensando...",
+        "Impulso IA: " + (datos.respuesta || "No recibí una respuesta.")
+      );
+    } catch (error) {
+      mensajes.textContent = mensajes.textContent.replace(
+        "Impulso IA: Pensando...",
+        "No pude conectarme. Revisa la configuración de la API en Cloudflare."
+      );
+    }
+    mensajes.scrollTop = mensajes.scrollHeight;
+  });
+})();
+</script>
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
