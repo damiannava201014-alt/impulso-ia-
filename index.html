@@ -11,6 +11,175 @@
   <style>
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    
+<style>
+  #ia-chat-btn {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 9999;
+    background: #6c5ce7;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 15px 22px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 18px #0003;
+  }
+
+  #ia-chat-box {
+    display: none;
+    position: fixed;
+    right: 22px;
+    bottom: 85px;
+    width: 320px;
+    max-width: calc(100vw - 44px);
+    height: 420px;
+    max-height: 65vh;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 5px 30px #0004;
+    z-index: 9999;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    flex-direction: column;
+    color: #222;
+  }
+
+  #ia-chat-head {
+    background: #6c5ce7;
+    color: white;
+    padding: 16px;
+    font-weight: bold;
+  }
+
+  #ia-chat-messages {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  #ia-chat-form {
+    display: flex;
+    gap: 6px;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+  }
+
+  #ia-chat-input {
+    min-width: 0;
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+
+  #ia-chat-form button {
+    background: #6c5ce7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .ia-msg {
+    margin: 8px 0;
+    padding: 9px 11px;
+    border-radius: 10px;
+    background: #f0edff;
+    overflow-wrap: anywhere;
+  }
+
+  .ia-user {
+    background: #e8f5e9;
+    text-align: right;
+  }
+</style>
+
+<button id="ia-chat-btn" type="button">💬 Habla con Impulso IA</button>
+
+<div id="ia-chat-box">
+  <div id="ia-chat-head">🤖 Impulso IA · Asistente</div>
+  <div id="ia-chat-messages" aria-live="polite">
+    <div class="ia-msg">¡Hola! 👋 ¿En qué puedo ayudarte?</div>
+  </div>
+  <form id="ia-chat-form">
+    <input id="ia-chat-input" placeholder="Escribe tu mensaje..." autocomplete="off" required>
+    <button type="submit">Enviar</button>
+  </form>
+</div>
+
+<script>
+(() => {
+  const API = "https://impulso-ia-api.damiannava201014.workers.dev";
+  const btn = document.getElementById("ia-chat-btn");
+  const box = document.getElementById("ia-chat-box");
+  const form = document.getElementById("ia-chat-form");
+  const input = document.getElementById("ia-chat-input");
+  const messages = document.getElementById("ia-chat-messages");
+
+  btn.addEventListener("click", () => {
+    box.style.display = box.style.display === "flex" ? "none" : "flex";
+  });
+
+  function addMessage(text, isUser = false) {
+    const div = document.createElement("div");
+    div.className = "ia-msg" + (isUser ? " ia-user" : "");
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const mensaje = input.value.trim();
+    if (!mensaje) return;
+
+    addMessage(mensaje, true);
+    input.value = "";
+    input.disabled = true;
+
+    const loading = addMessage("Pensando...");
+
+    try {
+      const response = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensaje })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Error al conectar con la IA.");
+      }
+
+      const respuesta =
+        data.respuesta || data.response || data.reply ||
+        data.text || data.mensaje || data.result ||
+        "La IA respondió, pero no encontré el texto de la respuesta.";
+
+      loading.textContent = typeof respuesta === "string"
+        ? respuesta
+        : JSON.stringify(respuesta);
+    } catch (error) {
+      loading.textContent =
+        "No pude conectar con la IA. Inténtalo de nuevo en un momento.";
+      console.error(error);
+    } finally {
+      input.disabled = false;
+      input.focus();
+    }
+  });
+})();
+</script>
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
