@@ -4,10 +4,168 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Impulso IA</title>
+  <title>Chat | Impulso IA</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f1020;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .chat {
+      width: 100%;
+      max-width: 520px;
+      height:  min(700px, 90vh);
+      display: flex;
+      flex-direction: column;
+      background: #191a31;
+      border: 1px solid #343653;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 50px #0006;
+    }
+
+    header {
+      padding: 20px;
+      background: #6c5ce7;
+    }
+
+    header h1 { margin: 0 0 6px; font-size: 22px; }
+    header p { margin: 0; font-size: 13px; opacity: .9; }
+
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .message {
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 12px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      line-height: 1.5;
+      background: #292b49;
+    }
+
+    .user { background: #5144b7; }
+    .status { color: #c4c5dc; font-style: italic; }
+
+    form {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid #343653;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 13px;
+      border: 1px solid #454765;
+      border-radius: 10px;
+      background: #101126;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 0 16px;
+      color: white;
+      background: #6c5ce7;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled { opacity: .5; cursor: wait; }
+    .back { color: white; display: inline-block; margin-top: 12px; }
+  </style>
 </head>
 <body>
-  <h1>Impulso IA</h1>
-  <p>Este archivo será la base del chat.</p>
+  <main class="chat">
+    <header>
+      <h1>🤖 Impulso IA</h1>
+      <p>Tu asistente de inteligencia artificial</p>
+    </header>
+
+    <div id="messages" aria-live="polite">
+      <div class="message">¡Hola! 👋 Escribe tu pregunta para comenzar.</div>
+    </div>
+
+    <form id="form">
+      <input id="prompt" placeholder="Escribe tu mensaje..." autocomplete="off" required>
+      <button id="send" type="submit">Enviar</button>
+    </form>
+  </main>
+
+  <script>
+    const API = "https://impulso-ia-api.damiannava201014.workers.dev";
+    const form = document.getElementById("form");
+    const promptInput = document.getElementById("prompt");
+    const messages = document.getElementById("messages");
+    const sendButton = document.getElementById("send");
+
+    function addMessage(text, type = "") {
+      const item = document.createElement("div");
+      item.className = "message " + type;
+      item.textContent = text;
+      messages.appendChild(item);
+      messages.scrollTop = messages.scrollHeight;
+      return item;
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const mensaje = promptInput.value.trim();
+      if (!mensaje) return;
+
+      addMessage(mensaje, "user");
+      promptInput.value = "";
+      sendButton.disabled = true;
+      const waiting = addMessage("Pensando...", "status");
+
+      try {
+        const response = await fetch(API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mensaje })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Error del servidor (" + response.status + ")");
+        }
+
+        const respuesta = data.respuesta || data.response || data.reply ||
+                          data.text || data.mensaje || data.result;
+
+        waiting.className = "message";
+        waiting.textContent = typeof respuesta === "string"
+          ? respuesta
+          : respuesta
+            ? JSON.stringify(respuesta)
+            : "El servidor respondió, pero no encontré el texto de la respuesta.";
+      } catch (error) {
+        waiting.className = "message";
+        waiting.textContent = "No se pudo conectar con la IA. Revisa la configuración del servidor e inténtalo de nuevo.";
+        console.error(error);
+      } finally {
+        sendButton.disabled = false;
+        promptInput.focus();
+      }
+    });
+  </script>
 </body>
 </html>
