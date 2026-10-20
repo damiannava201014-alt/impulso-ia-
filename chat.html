@@ -159,7 +159,7 @@
             : "El servidor respondió, pero no encontré el texto de la respuesta.";
       } catch (error) {
         waiting.className = "message";
-        waiting.textContent = "No se pudo conectar con la IA. Revisa la configuración del servidor e inténtalo de nuevo.";
+        waiting.textContent = "Error: " + error.message;
         console.error(error);
       } finally {
         sendButton.disabled = false;
