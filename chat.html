@@ -166,6 +166,10 @@ const respuesta =
           : respuesta
             ? JSON.stringify(respuesta)
             : "El servidor respondió, pero no encontré el texto de la respuesta.";
+        if (typeof respuesta === "string" && respuesta.trim()) {
+  historial.push({ role: "user", content: mensaje });
+  historial.push({ role: "assistant", content: respuesta });
+}
       } catch (error) {
         waiting.className = "message";
         waiting.textContent = "Error: " + error.message;
