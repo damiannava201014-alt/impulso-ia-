@@ -111,6 +111,7 @@
 
   <script>
     const API = "https://impulso-ia-api.damiannava201014.workers.dev";
+    let historial = [];
     const form = document.getElementById("form");
     const promptInput = document.getElementById("prompt");
     const messages = document.getElementById("messages");
@@ -139,7 +140,10 @@
         const response = await fetch(API, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mensaje })
+          body: JSON.stringify({
+  mensaje,
+  historial: historial
+})
         });
 
         const data = await response.json();
