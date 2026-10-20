@@ -148,9 +148,14 @@
           throw new Error(data.error || "Error del servidor (" + response.status + ")");
         }
 
-        const respuesta = data.respuesta || data.response || data.reply ||
-                          data.text || data.mensaje || data.result;
-
+const respuesta =
+  data.respuesta ??
+  data.choices?.[0]?.message?.content ??
+  data.response ??
+  data.reply ??
+  data.text ??
+  data.mensaje ??
+  data.result;
         waiting.className = "message";
         waiting.textContent = typeof respuesta === "string"
           ? respuesta
