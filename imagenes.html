@@ -1,0 +1,125 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6c4cff">
+  <title>Generador de imágenes | Impulso IA</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #f7f5ff;
+      background: linear-gradient(135deg, #151329, #241747);
+      padding: 28px 16px;
+    }
+    main { max-width: 760px; margin: 0 auto; }
+    a { color: #c8baff; }
+    .panel {
+      margin-top: 24px;
+      padding: 24px;
+      background: #ffffff0d;
+      border: 1px solid #ffffff20;
+      border-radius: 20px;
+    }
+    h1 { margin-bottom: 8px; }
+    p { line-height: 1.5; color: #d4cfe8; }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 14px;
+      border: 1px solid #ffffff30;
+      border-radius: 12px;
+      background: #17142b;
+      color: white;
+      font: inherit;
+      resize: vertical;
+    }
+    button {
+      margin-top: 14px;
+      padding: 13px 20px;
+      border: 0;
+      border-radius: 12px;
+      background: #6c4cff;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; cursor: wait; }
+    #estado { min-height: 24px; margin-top: 16px; }
+    #resultado { width: 100%; margin-top: 16px; border-radius: 14px; }
+    .oculto { display: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <a href="index.html">← Volver a Impulso IA</a>
+    <section class="panel">
+      <h1>Generador de imágenes</h1>
+      <p>Describe la imagen que quieres crear y deja que Impulso IA la genere.</p>
+
+      <form id="formulario">
+        <textarea id="prompt" maxlength="2000" required
+          placeholder="Ejemplo: un astronauta explorando un bosque mágico, estilo cinematográfico..."></textarea>
+        <button id="crear" type="submit">Crear imagen</button>
+      </form>
+
+      <p id="estado" role="status"></p>
+      <img id="resultado" class="oculto" alt="Imagen generada por Impulso IA">
+      <p><a id="descargar" class="oculto" download="imagen-impulso-ia.jpg">Descargar imagen</a></p>
+    </section>
+  </main>
+
+  <script>
+    const API = "https://impulso-ia-api.damiannava201014.workers.dev";
+    const formulario = document.getElementById("formulario");
+    const promptInput = document.getElementById("prompt");
+    const crear = document.getElementById("crear");
+    const estado = document.getElementById("estado");
+    const resultado = document.getElementById("resultado");
+    const descargar = document.getElementById("descargar");
+
+    formulario.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+      const prompt = promptInput.value.trim();
+      if (!prompt) return;
+
+      crear.disabled = true;
+      estado.textContent = "Creando tu imagen… puede tardar un poco.";
+      resultado.classList.add("oculto");
+      descargar.classList.add("oculto");
+
+      try {
+        const respuesta = await fetch(API + "/imagen", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt })
+        });
+
+        const datos = await respuesta.json();
+        if (!respuesta.ok) {
+          throw new Error(datos.error || "No se pudo generar la imagen.");
+        }
+        if (!datos.dataURI) {
+          throw new Error("El servidor no devolvió una imagen.");
+        }
+
+        resultado.src = datos.dataURI;
+        resultado.classList.remove("oculto");
+        descargar.href = datos.dataURI;
+        descargar.classList.remove("oculto");
+        estado.textContent = "¡Imagen creada!";
+      } catch (error) {
+        estado.textContent = "No se pudo crear la imagen: " + error.message;
+      } finally {
+        crear.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
+```
