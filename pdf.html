@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lector PDF IA | Impulso IA</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:#f4f5ff;font-family:Arial,sans-serif;padding:24px}
+main{max-width:760px;margin:35px auto}
+a{color:#b9a9ff;text-decoration:none}
+header{margin-bottom:28px}
+h1{font-size:32px;margin-bottom:8px}
+p{color:#c2c8dd;line-height:1.6}
+.panel{background:#151d33;border:1px solid #303b5b;border-radius:18px;padding:22px;margin:18px 0}
+label{display:block;margin:15px 0 8px;font-weight:bold}
+input,textarea,select{width:100%;padding:13px;border:1px solid #424d6c;border-radius:10px;background:#0d1428;color:white;font:inherit}
+textarea{min-height:120px;resize:vertical}
+button{border:0;border-radius:10px;padding:13px 18px;background:#7657ff;color:white;font-weight:bold;cursor:pointer;margin-top:14px}
+button:disabled{opacity:.5;cursor:wait}
+#resultado{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7}
+.small{font-size:13px;color:#aeb8d2}
+</style>
+</head>
+<body>
+<main>
+<header>
+<a href="index.html">← Volver a Impulso IA</a>
+<h1>📚 Lector de PDF inteligente</h1>
+<p>Sube un documento PDF, extrae su texto y pide a la inteligencia artificial que lo resuma o responda tus preguntas.</p>
+</header>
+
+<section class="panel">
+<label for="archivo">1. Selecciona tu archivo PDF</label>
+<input id="archivo" type="file" accept=".pdf,application/pdf">
+<p class="small">El PDF se procesa en tu navegador para extraer el texto. No selecciones documentos confidenciales.</p>
+
+<label for="pregunta">2. ¿Qué quieres hacer con el documento?</label>
+<select id="modo">
+<option value="Resume el documento de forma clara, con sus ideas principales y conclusiones.">Resumir el documento</option>
+<option value="Extrae las ideas principales en una lista ordenada.">Extraer ideas principales</option>
+<option value="Explica el contenido con palabras sencillas para un estudiante.">Explicarlo de forma sencilla</option>
+<option value="Crea 10 preguntas de estudio con sus respuestas basadas en el documento.">Crear preguntas de estudio</option>
+</select>
+
+<label for="pregunta">3. Pregunta opcional sobre el PDF</label>
+<textarea id="pregunta" placeholder="Ejemplo: ¿Cuáles son las conclusiones más importantes?"></textarea>
+<button id="procesar">📖 Analizar PDF</button>
+<p id="estado" role="status"></p>
+</section>
+
+<section class="panel">
+<h2>Resultado</h2>
+<div id="resultado">Tu resultado aparecerá aquí.</div>
+<button id="copiar" hidden>Copiar resultado</button>
+</section>
+</main>
+
+<script type="module">
+import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs";
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
+
+const API = "https://impulso-ia-api.damiannava201014.workers.dev";
+const archivo = document.getElementById("archivo");
+const pregunta = document.getElementById("pregunta");
+const modo = document.getElementById("modo");
+const estado = document.getElementById("estado");
+const resultado = document.getElementById("resultado");
+const procesar = document.getElementById("procesar");
+const copiar = document.getElementById("copiar");
+
+procesar.addEventListener("click", async () => {
+  const file = archivo.files[0];
+  if (!file) {
+    estado.textContent = "Primero selecciona un archivo PDF.";
+    return;
+  }
+  if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+    estado.textContent = "Selecciona un archivo PDF válido.";
+    return;
+  }
+  if (file.size > 15 * 1024 * 1024) {
+    estado.textContent = "El archivo supera 15 MB. Prueba con un PDF más pequeño.";
+    return;
+  }
+
+  procesar.disabled = true;
+  copiar.hidden = true;
+  resultado.textContent = "";
+  estado.textContent = "Leyendo el PDF...";
+
+  try {
+    const bytes = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({data: bytes}).promise;
+    let textoPDF = "";
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const pagina = await pdf.getPage(i);
+      const contenido = await pagina.getTextContent();
+      textoPDF += contenido.items.map(item => item.str).join(" ") + "\n";
+      if (textoPDF.length > 45000) break;
+    }
+
+    if (!textoPDF.trim()) {
+      throw new Error("No se encontró texto. Si el PDF contiene imágenes escaneadas, necesitará OCR.");
+    }
+
+    const instruccion = modo.value;
+    const preguntaUsuario = pregunta.value.trim();
+    const mensaje = `Actúa como asistente de lectura de documentos. Trabaja solamente con el contenido proporcionado y no inventes datos. ${instruccion}\n${preguntaUsuario ? "Pregunta adicional del usuario: " + preguntaUsuario + "\n" : ""}\nContenido extraído del PDF:\n${textoPDF.slice(0, 45000)}`;
+
+    estado.textContent = "Enviando el texto a Impulso IA...";
+    const respuestaHTTP = await fetch(API, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({mensaje})
+    });
+
+    if (!respuestaHTTP.ok) throw new Error("El servidor respondió con error HTTP " + respuestaHTTP.status);
+
+    const data = await respuestaHTTP.json();
+    const texto = data.respuesta ?? data.choices?.[0]?.message?.content ?? data.response ?? data.reply ?? data.text ?? data.mensaje ?? data.result;
+
+    if (!texto) throw new Error("La IA respondió, pero no se encontró el texto de la respuesta.");
+
+    resultado.textContent = texto;
+    estado.textContent = "¡Documento analizado!";
+    copiar.hidden = false;
+  } catch (error) {
+    estado.textContent = "No se pudo analizar el PDF: " + error.message;
+  } finally {
+    procesar.disabled = false;
+  }
+});
+
+copiar.addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(resultado.textContent);
+    estado.textContent = "Resultado copiado.";
+  } catch {
+    estado.textContent = "No se pudo copiar automáticamente. Selecciona el resultado y cópialo manualmente.";
+  }
+});
+</script>
+</body>
+</html>
