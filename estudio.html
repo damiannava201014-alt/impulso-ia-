@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Asistente de estudio con inteligencia artificial de Impulso IA.">
+  <title>Asistente de estudio | Impulso IA</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px 16px;
+      background: #0b1220;
+      color: #f8fafc;
+      font-family: Arial, sans-serif;
+    }
+    main { max-width: 760px; margin: 35px auto; }
+    .volver { color: #b7a8ff; text-decoration: none; }
+    h1 { margin-top: 28px; font-size: 32px; }
+    p { color: #cbd5e1; line-height: 1.6; }
+    label { display: block; margin: 20px 0 8px; font-weight: bold; }
+    select, textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      background: #111c30;
+      color: white;
+      font: inherit;
+    }
+    textarea { min-height: 140px; resize: vertical; }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 13px 18px;
+      background: #6c4cff;
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      margin: 12px 8px 0 0;
+    }
+    button:disabled { opacity: .6; cursor: wait; }
+    .resultado {
+      margin-top: 24px;
+      padding: 18px;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      background: #111c30;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      min-height: 120px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="volver" href="index.html">← Volver a Impulso IA</a>
+    <h1>🧠 Asistente de estudio</h1>
+    <p>Aprende a tu ritmo. Elige cómo quieres estudiar y escribe el tema o ejercicio.</p>
+
+    <label for="modo">¿Cómo quieres estudiar?</label>
+    <select id="modo">
+      <option value="explicar">Explicarme un tema</option>
+      <option value="preguntas">Crear preguntas de práctica</option>
+      <option value="resolver">Resolver un ejercicio paso a paso</option>
+      <option value="examen">Prepararme para un examen</option>
+      <option value="resumen">Crear una guía de estudio</option>
+    </select>
+
+    <label for="tema">Materia, tema o ejercicio</label>
+    <textarea id="tema" maxlength="6000" placeholder="Ejemplo: explícame las fracciones con ejemplos sencillos..."></textarea>
+
+    <button id="generar">🎓 Ayudarme a estudiar</button>
+    <button id="copiar" type="button">📋 Copiar resultado</button>
+
+    <div id="resultado" class="resultado" aria-live="polite">Tu material de estudio aparecerá aquí.</div>
+  </main>
+
+  <script>
+    const API = "https://impulso-ia-api.damiannava201014.workers.dev";
+    const modo = document.getElementById("modo");
+    const tema = document.getElementById("tema");
+    const generar = document.getElementById("generar");
+    const copiar = document.getElementById("copiar");
+    const resultado = document.getElementById("resultado");
+
+    const instrucciones = {
+      explicar: "Explica el tema de forma sencilla, paso a paso, con ejemplos y una conclusión.",
+      preguntas: "Crea 8 preguntas de práctica sobre el tema y coloca las respuestas al final, separadas de las preguntas.",
+      resolver: "Resuelve el ejercicio paso a paso, explica el razonamiento y comprueba el resultado. Si faltan datos, pregunta por ellos.",
+      examen: "Crea una guía de preparación para un examen con los conceptos importantes, errores comunes y preguntas de práctica con respuestas.",
+      resumen: "Crea una guía de estudio organizada con títulos, conceptos clave, definiciones y ejemplos."
+    };
+
+    generar.addEventListener("click", async () => {
+      const solicitud = tema.value.trim();
+
+      if (!solicitud) {
+        resultado.textContent = "Escribe una materia, tema o ejercicio primero.";
+        tema.focus();
+        return;
+      }
+
+      generar.disabled = true;
+      resultado.textContent = "Impulso IA está preparando tu material de estudio…";
+
+      try {
+        const respuesta = await fetch(API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            mensaje: "Eres un tutor educativo paciente. Responde en español claro y adecuado para aprender. " +
+              instrucciones[modo.value] + "\nTema o ejercicio: " + solicitud
+          })
+        });
+
+        if (!respuesta.ok) {
+          throw new Error("El servidor respondió con el código " + respuesta.status);
+        }
+
+        const data = await respuesta.json();
+        const texto = data.respuesta ??
+          data.choices?.[0]?.message?.content ??
+          data.response ?? data.reply ?? data.text ??
+          data.mensaje ?? data.result;
+
+        if (typeof texto !== "string" || !texto.trim()) {
+          throw new Error("No se encontró contenido en la respuesta del servidor.");
+        }
+
+        resultado.textContent = texto;
+      } catch (error) {
+        resultado.textContent = "No pude preparar el material. " + error.message +
+          "\nComprueba tu conexión e inténtalo de nuevo.";
+      } finally {
+        generar.disabled = false;
+      }
+    });
+
+    copiar.addEventListener("click", async () => {
+      const texto = resultado.textContent;
+      if (!texto || texto === "Tu material de estudio aparecerá aquí.") return;
+
+      try {
+        await navigator.clipboard.writeText(texto);
+        copiar.textContent = "✅ Copiado";
+        setTimeout(() => copiar.textContent = "📋 Copiar resultado", 1800);
+      } catch {
+        resultado.textContent += "\n\nNo se pudo copiar automáticamente. Selecciona el texto y cópialo manualmente.";
+      }
+    });
+  </script>
+</body>
+</html>
