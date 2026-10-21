@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Traduce textos con inteligencia artificial usando Impulso IA.">
+  <title>Traductor IA | Impulso IA</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px 16px;
+      background: #0b1220;
+      color: #f8fafc;
+      font-family: Arial, sans-serif;
+    }
+    main { max-width: 760px; margin: 35px auto; }
+    .volver { color: #b7a8ff; text-decoration: none; }
+    h1 { margin-top: 28px; font-size: 32px; }
+    p { color: #cbd5e1; line-height: 1.6; }
+    label { display: block; margin: 20px 0 8px; font-weight: bold; }
+    select, textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      background: #111c30;
+      color: white;
+      font: inherit;
+    }
+    textarea { min-height: 160px; resize: vertical; }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 13px 18px;
+      background: #6c4cff;
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      margin: 12px 8px 0 0;
+    }
+    button:disabled { opacity: .6; cursor: wait; }
+    .resultado {
+      margin-top: 24px;
+      padding: 18px;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      background: #111c30;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      min-height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="volver" href="index.html">← Volver a Impulso IA</a>
+    <h1>🌎 Traductor con IA</h1>
+    <p>Escribe o pega un texto, elige el idioma y obtén tu traducción.</p>
+
+    <label for="idioma">Traducir al idioma</label>
+    <select id="idioma">
+      <option>Inglés</option>
+      <option>Español</option>
+      <option>Francés</option>
+      <option>Alemán</option>
+      <option>Italiano</option>
+      <option>Portugués</option>
+      <option>Japonés</option>
+      <option>Chino simplificado</option>
+      <option>Coreano</option>
+      <option>Árabe</option>
+    </select>
+
+    <label for="entrada">Texto que quieres traducir</label>
+    <textarea id="entrada" maxlength="6000" placeholder="Escribe aquí tu texto..."></textarea>
+
+    <button id="traducir">🌐 Traducir texto</button>
+    <button id="copiar" type="button">📋 Copiar traducción</button>
+
+    <div id="resultado" class="resultado" aria-live="polite">Tu traducción aparecerá aquí.</div>
+  </main>
+
+  <script>
+    const API = "https://impulso-ia-api.damiannava201014.workers.dev";
+    const entrada = document.getElementById("entrada");
+    const idioma = document.getElementById("idioma");
+    const traducir = document.getElementById("traducir");
+    const copiar = document.getElementById("copiar");
+    const resultado = document.getElementById("resultado");
+
+    traducir.addEventListener("click", async () => {
+      const textoOriginal = entrada.value.trim();
+
+      if (!textoOriginal) {
+        resultado.textContent = "Escribe primero el texto que quieres traducir.";
+        entrada.focus();
+        return;
+      }
+
+      traducir.disabled = true;
+      resultado.textContent = "Impulso IA está traduciendo…";
+
+      try {
+        const respuesta = await fetch(API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            mensaje: "Traduce el siguiente texto al idioma " + idioma.value +
+              ". Conserva el significado, el tono y el formato. Devuelve solo la traducción, sin explicaciones adicionales.\n\n" +
+              textoOriginal
+          })
+        });
+
+        if (!respuesta.ok) {
+          throw new Error("El servidor respondió con el código " + respuesta.status);
+        }
+
+        const data = await respuesta.json();
+        const texto = data.respuesta ??
+          data.choices?.[0]?.message?.content ??
+          data.response ?? data.reply ?? data.text ??
+          data.mensaje ?? data.result;
+
+        if (typeof texto !== "string" || !texto.trim()) {
+          throw new Error("No se encontró la traducción en la respuesta del servidor.");
+        }
+
+        resultado.textContent = texto;
+      } catch (error) {
+        resultado.textContent = "No se pudo traducir. " + error.message +
+          "\nComprueba tu conexión e inténtalo de nuevo.";
+      } finally {
+        traducir.disabled = false;
+      }
+    });
+
+    copiar.addEventListener("click", async () => {
+      const texto = resultado.textContent;
+      if (!texto || texto === "Tu traducción aparecerá aquí.") return;
+
+      try {
+        await navigator.clipboard.writeText(texto);
+        copiar.textContent = "✅ Copiado";
+        setTimeout(() => copiar.textContent = "📋 Copiar traducción", 1800);
+      } catch {
+        resultado.textContent += "\n\nNo se pudo copiar automáticamente. Selecciona el texto y cópialo manualmente.";
+      }
+    });
+  </script>
+</body>
+</html>
