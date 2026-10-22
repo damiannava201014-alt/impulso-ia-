@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Guías de estudio escolar gratuitas para primaria, secundaria, preparatoria y universidad.">
+  <title>Guías de Estudio | Impulso IA</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1120;
+      color: #f8fafc;
+      line-height: 1.6;
+    }
+    header {
+      padding: 24px 18px;
+      text-align: center;
+      background: #111b33;
+      border-bottom: 1px solid #293754;
+    }
+    header a { color: #c4b5fd; text-decoration: none; }
+    header h1 { margin: 12px 0 4px; font-size: 30px; }
+    header p { color: #cbd5e1; margin: 0; }
+    main { max-width: 1000px; margin: auto; padding: 24px 16px 50px; }
+    .intro {
+      padding: 24px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #312e81, #172554);
+      margin-bottom: 26px;
+    }
+    .intro h2 { margin-top: 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 15px;
+    }
+    .card {
+      padding: 20px;
+      background: #172554;
+      border: 1px solid #334155;
+      border-radius: 14px;
+    }
+    .card .emoji { font-size: 30px; }
+    .card h3 { margin: 8px 0; }
+    .card p { color: #cbd5e1; margin-bottom: 0; }
+    .panel {
+      margin-top: 28px;
+      padding: 22px;
+      border: 1px solid #334155;
+      background: #111b33;
+      border-radius: 16px;
+    }
+    label { display: block; margin: 14px 0 6px; font-weight: bold; }
+    select, input, textarea {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border-radius: 9px;
+      border: 1px solid #475569;
+      background: #0b1120;
+      color: white;
+      font: inherit;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 12px 18px;
+      margin: 14px 8px 0 0;
+      font: inherit;
+      font-weight: bold;
+      cursor: pointer;
+      background: #7c3aed;
+      color: white;
+    }
+    button:hover { background: #6d28d9; }
+    button:disabled { opacity: .6; cursor: wait; }
+    #resultado {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      padding: 16px;
+      margin-top: 18px;
+      background: #0b1120;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      min-height: 60px;
+    }
+    .nota { color: #cbd5e1; font-size: 14px; }
+    footer { text-align: center; padding: 24px; color: #94a3b8; }
+    @media print {
+      body { background: white; color: black; }
+      header, .intro, .grid, .panel form, footer, .no-print { display: none !important; }
+      main, .panel, #resultado { background: white; color: black; border: none; }
+      #resultado { white-space: pre-wrap; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html">← Volver a Impulso IA</a>
+    <h1>📚 Guías de estudio escolar</h1>
+    <p>Aprende a tu ritmo, desde primaria hasta la universidad.</p>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>Tu espacio para aprender</h2>
+      <p>Explora las áreas escolares y crea una guía personalizada con explicaciones, ejemplos y preguntas de práctica.</p>
+    </section>
+
+    <h2>Elige tu nivel</h2>
+    <div class="grid">
+      <article class="card">
+        <div class="emoji">🎒</div>
+        <h3>Primaria</h3>
+        <p>Lectura, escritura, matemáticas y ciencias básicas.</p>
+      </article>
+      <article class="card">
+        <div class="emoji">📘</div>
+        <h3>Secundaria</h3>
+        <p>Álgebra, español, historia, biología, física y química.</p>
+      </article>
+      <article class="card">
+        <div class="emoji">🎓</div>
+        <h3>Preparatoria</h3>
+        <p>Materias avanzadas, ejercicios y preparación para exámenes.</p>
+      </article>
+      <article class="card">
+        <div class="emoji">🏛️</div>
+        <h3>Universidad</h3>
+        <p>Conceptos especializados, asignaturas y práctica académica.</p>
+      </article>
+    </div>
+
+    <section class="panel">
+      <h2>✨ Genera tu guía de estudio con IA</h2>
+      <p class="nota">Elige tu nivel, materia y tema. La IA preparará material para ayudarte a estudiar.</p>
+
+      <form id="formulario">
+        <label for="nivel">Nivel escolar</label>
+        <select id="nivel" required>
+          <option value="Primaria">Primaria</option>
+          <option value="Secundaria">Secundaria</option>
+          <option value="Preparatoria o bachillerato">Preparatoria o bachillerato</option>
+          <option value="Universidad">Universidad</option>
+        </select>
+
+        <label for="grado">Grado o semestre</label>
+        <input id="grado" maxlength="80" placeholder="Ej.: 2.º de secundaria o 1.er semestre">
+
+        <label for="materia">Materia</label>
+        <select id="materia" required>
+          <option>Matemáticas</option>
+          <option>Español y literatura</option>
+          <option>Ciencias naturales</option>
+          <option>Biología</option>
+          <option>Física</option>
+          <option>Química</option>
+          <option>Historia</option>
+          <option>Geografía</option>
+          <option>Inglés</option>
+          <option>Informática</option>
+          <option>Otra materia</option>
+        </select>
+
+        <label for="tema">Tema que quieres estudiar</label>
+        <input id="tema" maxlength="250" required placeholder="Ej.: fracciones, células, Revolución mexicana...">
+
+        <label for="tipo">Tipo de guía</label>
+        <select id="tipo">
+          <option value="Guía completa con conceptos, explicaciones, ejemplos y ejercicios con respuestas explicadas">Guía completa</option>
+          <option value="Resumen para repasar antes de un examen, con conceptos clave">Resumen para examen</option>
+          <option value="Explicación desde cero, paso a paso, con ejemplos sencillos">Explicación desde cero</option>
+          <option value="Cuestionario de práctica con respuestas al final y explicación">Cuestionario de práctica</option>
+          <option value="Guía de ejercicios progresivos, de fácil a difícil, con soluciones explicadas">Ejercicios resueltos</option>
+          <option value="Mapa conceptual escrito y lista de conceptos clave">Mapa conceptual</option>
+        </select>
+
+        <label for="detalles">¿Qué necesitas aprender? (opcional)</label>
+        <textarea id="detalles" maxlength="1500" placeholder="Escribe qué temas entran en tu examen o qué se te dificulta."></textarea>
+
+        <button id="generar" type="submit">Crear mi guía 📚</button>
+      </form>
+
+      <div id="estado" role="status" aria-live="polite"></div>
+      <div id="resultado">Tu guía de estudio aparecerá aquí.</div>
+      <button id="copiar" class="no-print" type="button" hidden>Copiar guía</button>
+      <button id="imprimir" class="no-print" type="button" hidden>Imprimir o guardar en PDF</button>
+    </section>
+  </main>
+
+  <footer>Impulso IA · Aprende, crea y crece</footer>
+
+  <script>
+    const API = "https://impulso-ia-api.damiannava201014.workers.dev";
+    const formulario = document.getElementById("formulario");
+    const resultado = document.getElementById("resultado");
+    const estado = document.getElementById("estado");
+    const generar = document.getElementById("generar");
+    const copiar = document.getElementById("copiar");
+    const imprimir = document.getElementById("imprimir");
+
+    formulario.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const tema = document.getElementById("tema").value.trim();
+      if (!tema) {
+        estado.textContent = "Escribe el tema que quieres estudiar.";
+        return;
+      }
+
+      const nivel = document.getElementById("nivel").value;
+      const grado = document.getElementById("grado").value.trim();
+      const materia = document.getElementById("materia").value;
+      const tipo = document.getElementById("tipo").value;
+      const detalles = document.getElementById("detalles").value.trim();
+
+      const mensaje = `Actúa como un tutor escolar cuidadoso y claro. Crea una guía de estudio en español.
+Nivel: ${nivel}.
+Grado o semestre: ${grado || "No especificado"}.
+Materia: ${materia}.
+Tema: ${tema}.
+Formato solicitado: ${tipo}.
+Necesidades adicionales: ${detalles || "Ninguna"}.
+
+Organiza la guía con títulos claros, conceptos explicados según el nivel escolar, ejemplos paso a paso cuando correspondan, errores comunes y actividades para practicar. Incluye respuestas explicadas al final si hay ejercicios. No inventes referencias ni afirmes seguir un programa oficial específico si no se proporcionó. Si falta información, indícalo con claridad.`;
+
+      generar.disabled = true;
+      copiar.hidden = true;
+      imprimir.hidden = true;
+      estado.textContent = "Preparando tu guía de estudio...";
+      resultado.textContent = "";
+
+      try {
+        const respuesta = await fetch(API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mensaje })
+        });
+
+        const data = await respuesta.json();
+        if (!respuesta.ok) {
+          throw new Error(data.error || data.mensaje || "El servidor devolvió un error.");
+        }
+
+        const texto = data.respuesta ?? data.choices?.[0]?.message?.content ??
+          data.response ?? data.reply ?? data.text ?? data.mensaje ?? data.result;
+
+        if (typeof texto !== "string" || !texto.trim()) {
+          throw new Error("El servidor respondió, pero no encontré el texto de la guía.");
+        }
+
+        resultado.textContent = texto;
+        estado.textContent = "¡Tu guía está lista!";
+        copiar.hidden = false;
+        imprimir.hidden = false;
+      } catch (error) {
+        estado.textContent = "No se pudo crear la guía. " + error.message;
+        resultado.textContent = "Comprueba tu conexión e inténtalo de nuevo.";
+      } finally {
+        generar.disabled = false;
+      }
+    });
+
+    copiar.addEventListener("click", async function() {
+      try {
+        await navigator.clipboard.writeText(resultado.textContent);
+        estado.textContent = "Guía copiada.";
+      } catch {
+        estado.textContent = "No se pudo copiar automáticamente. Selecciona el texto de la guía y cópialo.";
+      }
+    });
+
+    imprimir.addEventListener("click", function() {
+      window.print();
+    });
+  </script>
+</body>
+</html>
