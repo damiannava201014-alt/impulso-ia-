@@ -1,0 +1,544 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Biblioteca gratuita de guías escolares de Impulso IA, organizada por nivel, grado y materia.">
+  <title>Biblioteca Escolar | Impulso IA</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1120;
+      color: #f8fafc;
+    }
+    header {
+      padding: 35px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #172554, #4c1d95);
+    }
+    header h1 { margin: 0 0 12px; font-size: 32px; }
+    header p { margin: 0; color: #e2e8f0; }
+    main { max-width: 1000px; margin: auto; padding: 25px 16px; }
+    .panel {
+      background: #111c32;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 22px;
+    }
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+    }
+    label { display: block; margin-bottom: 7px; font-weight: bold; }
+    select, input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 9px;
+      border: 1px solid #475569;
+      background: #0b1120;
+      color: white;
+      font-size: 15px;
+    }
+    .guides {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .guide {
+      padding: 18px;
+      border-radius: 13px;
+      background: #172554;
+      border: 1px solid #334155;
+    }
+    .guide h3 { margin-top: 0; }
+    .tag { color: #c4b5fd; font-size: 13px; }
+    button, .link-button {
+      display: inline-block;
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 15px;
+      background: #6c4cff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      margin: 5px 5px 0 0;
+    }
+    button:hover, .link-button:hover { background: #5638db; }
+    .secondary { background: #334155; }
+    .content {
+      display: none;
+      white-space: pre-wrap;
+      line-height: 1.7;
+      background: #0b1120;
+      padding: 15px;
+      margin-top: 14px;
+      border-radius: 10px;
+      border: 1px solid #475569;
+    }
+    .empty { color: #cbd5e1; }
+    footer { text-align: center; padding: 25px; color: #94a3b8; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>📚 Biblioteca Escolar Impulso IA</h1>
+  <p>Guías gratuitas para aprender, practicar y prepararte para tus exámenes.</p>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>Encuentra tu guía</h2>
+    <div class="filters">
+      <div>
+        <label for="nivel">Nivel educativo</label>
+        <select id="nivel">
+          <option value="Todos">Todos los niveles</option>
+          <option value="Primaria">Primaria</option>
+          <option value="Secundaria">Secundaria</option>
+          <option value="Preparatoria">Preparatoria</option>
+          <option value="Universidad">Universidad</option>
+        </select>
+      </div>
+      <div>
+        <label for="grado">Grado o etapa</label>
+        <select id="grado">
+          <option value="Todos">Todos los grados</option>
+        </select>
+      </div>
+      <div>
+        <label for="materia">Materia</label>
+        <select id="materia">
+          <option value="Todas">Todas las materias</option>
+        </select>
+      </div>
+      <div>
+        <label for="buscar">Buscar tema</label>
+        <input id="buscar" placeholder="Ej. fracciones, células...">
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Guías disponibles</h2>
+    <p id="contador" class="empty"></p>
+    <div id="guias" class="guides"></div>
+  </section>
+
+  <section class="panel" style="margin-top:25px">
+    <h2>¿Buscas una guía sobre otro tema?</h2>
+    <p>Usa nuestro asistente para crear una guía personalizada según tu materia y tus necesidades.</p>
+    <a class="link-button" href="guias.html">✨ Crear guía personalizada</a>
+    <a class="link-button secondary" href="index.html">← Volver al inicio</a>
+  </section>
+</main>
+
+<footer>Impulso IA · Aprende, crea y crece</footer>
+
+<script>
+const datos = [
+  {
+    nivel:"Primaria", grado:"1.º", materia:"Matemáticas",
+    titulo:"Sumas y restas básicas", tema:"sumas restas números",
+    contenido:`SUMAS Y RESTAS BÁSICAS
+
+Una suma sirve para juntar cantidades.
+Ejemplo: 3 + 2 = 5.
+
+Una resta sirve para quitar una cantidad.
+Ejemplo: 7 - 4 = 3.
+
+PRACTICA
+1. 2 + 5 = ___
+2. 6 + 3 = ___
+3. 8 - 2 = ___
+4. 9 - 5 = ___
+
+RESPUESTAS
+1. 7
+2. 9
+3. 6
+4. 4`
+  },
+  {
+    nivel:"Primaria", grado:"3.º", materia:"Matemáticas",
+    titulo:"Multiplicaciones", tema:"multiplicación tablas",
+    contenido:`MULTIPLICACIONES
+
+Multiplicar es sumar varias veces el mismo número.
+Ejemplo: 4 × 3 = 4 + 4 + 4 = 12.
+
+Recuerda:
+5 × 2 = 10
+3 × 4 = 12
+6 × 3 = 18
+
+PRACTICA
+1. 2 × 6 = ___
+2. 4 × 5 = ___
+3. 3 × 7 = ___
+
+RESPUESTAS
+1. 12
+2. 20
+3. 21`
+  },
+  {
+    nivel:"Primaria", grado:"5.º", materia:"Ciencias",
+    titulo:"El sistema solar", tema:"planetas tierra sol",
+    contenido:`EL SISTEMA SOLAR
+
+El sistema solar está formado por el Sol y los cuerpos celestes que giran a su alrededor.
+
+Los ocho planetas, en orden desde el Sol, son:
+Mercurio, Venus, Tierra, Marte, Júpiter, Saturno, Urano y Neptuno.
+
+La Tierra es el planeta donde vivimos. Su movimiento de rotación produce el día y la noche; su traslación alrededor del Sol dura aproximadamente un año.
+
+PREGUNTAS
+1. ¿Cuál es la estrella del sistema solar?
+2. ¿Cuántos planetas hay?
+3. ¿Qué movimiento produce el día y la noche?
+
+RESPUESTAS
+1. El Sol.
+2. Ocho.
+3. La rotación.`
+  },
+  {
+    nivel:"Primaria", grado:"6.º", materia:"Español",
+    titulo:"Sujeto y predicado", tema:"gramática sujeto predicado",
+    contenido:`SUJETO Y PREDICADO
+
+El sujeto indica de quién o de qué se habla.
+El predicado expresa lo que hace el sujeto o lo que se dice de él.
+
+Ejemplo: "La niña lee un libro".
+Sujeto: La niña.
+Predicado: lee un libro.
+
+PRACTICA: identifica el sujeto.
+1. El perro corre en el parque.
+2. Mis amigos estudian matemáticas.
+3. La lluvia moja las plantas.
+
+RESPUESTAS
+1. El perro.
+2. Mis amigos.
+3. La lluvia.`
+  },
+  {
+    nivel:"Secundaria", grado:"1.º", materia:"Matemáticas",
+    titulo:"Números negativos", tema:"enteros positivos negativos",
+    contenido:`NÚMEROS POSITIVOS Y NEGATIVOS
+
+Los números enteros incluyen negativos, cero y positivos.
+Ejemplo: -3, -2, -1, 0, 1, 2, 3.
+
+En la recta numérica, los números que están a la derecha son mayores.
+
+Reglas:
+- (+3) + (+2) = 5
+- (-3) + (-2) = -5
+- (+5) + (-2) = 3
+
+PRACTICA
+1. -4 + 7 = ___
+2. -3 - 2 = ___
+3. 8 + (-5) = ___
+
+RESPUESTAS
+1. 3
+2. -5
+3. 3`
+  },
+  {
+    nivel:"Secundaria", grado:"2.º", materia:"Ciencias",
+    titulo:"La célula", tema:"biología células organelos",
+    contenido:`LA CÉLULA
+
+La célula es la unidad básica estructural y funcional de los seres vivos.
+
+Partes principales:
+- Membrana celular: regula el intercambio con el exterior.
+- Citoplasma: medio donde se encuentran estructuras celulares.
+- Núcleo: contiene la mayor parte del material genético en las células eucariotas.
+
+Las células vegetales tienen pared celular y cloroplastos; las animales no tienen esas estructuras.
+
+PREGUNTAS
+1. ¿Cuál es la unidad básica de los seres vivos?
+2. ¿Qué estructura regula el intercambio con el exterior?
+3. Menciona una estructura propia de las células vegetales.
+
+RESPUESTAS
+1. La célula.
+2. La membrana celular.
+3. La pared celular o los cloroplastos.`
+  },
+  {
+    nivel:"Secundaria", grado:"3.º", materia:"Matemáticas",
+    titulo:"Ecuaciones de primer grado", tema:"álgebra ecuaciones",
+    contenido:`ECUACIONES DE PRIMER GRADO
+
+Una ecuación contiene una igualdad y una o más incógnitas.
+
+Ejemplo:
+x + 4 = 10
+Restamos 4 a ambos lados:
+x = 10 - 4
+x = 6
+
+Otro ejemplo:
+3x = 15
+Dividimos ambos lados entre 3:
+x = 5
+
+PRACTICA
+1. x + 7 = 12
+2. 2x = 18
+3. x - 5 = 9
+
+RESPUESTAS
+1. x = 5
+2. x = 9
+3. x = 14`
+  },
+  {
+    nivel:"Preparatoria", grado:"1.er semestre", materia:"Matemáticas",
+    titulo:"Funciones lineales", tema:"funciones álgebra gráfica",
+    contenido:`FUNCIONES LINEALES
+
+Una función lineal puede expresarse como y = mx + b.
+- m representa la pendiente.
+- b representa la intersección con el eje y.
+
+Ejemplo: y = 2x + 1.
+Si x = 3, entonces y = 2(3) + 1 = 7.
+
+La pendiente indica cuánto cambia y cuando x aumenta una unidad.
+
+PRACTICA
+1. En y = 3x + 2, ¿cuál es la pendiente?
+2. Calcula y cuando x = 4 en y = x + 5.
+3. ¿Cuál es la intersección con el eje y de y = 2x - 3?
+
+RESPUESTAS
+1. 3
+2. 9
+3. -3`
+  },
+  {
+    nivel:"Preparatoria", grado:"2.º semestre", materia:"Biología",
+    titulo:"Genética básica", tema:"ADN genes herencia",
+    contenido:`GENÉTICA BÁSICA
+
+La genética estudia cómo se transmiten las características hereditarias.
+El ADN contiene información genética. Los genes son segmentos de ADN que contribuyen a determinar características.
+
+Los cromosomas son estructuras que contienen ADN y proteínas.
+En muchos organismos, las características dependen de varios genes y del ambiente.
+
+PREGUNTAS
+1. ¿Qué estudia la genética?
+2. ¿Qué molécula contiene la información genética?
+3. ¿Qué es un gen?
+
+RESPUESTAS
+1. La herencia y la variación.
+2. El ADN.
+3. Un segmento de ADN con información funcional.`
+  },
+  {
+    nivel:"Preparatoria", grado:"3.er semestre", materia:"Historia",
+    titulo:"La Revolución Mexicana", tema:"México historia revolución",
+    contenido:`LA REVOLUCIÓN MEXICANA
+
+La Revolución Mexicana comenzó en 1910, en un contexto de descontento político y social durante el Porfiriato.
+
+Francisco I. Madero llamó a levantarse contra la reelección de Porfirio Díaz. Durante el conflicto participaron distintos movimientos y líderes, con demandas diversas relacionadas con la democracia, la tierra y los derechos sociales.
+
+La Constitución de 1917 incorporó, entre otros temas, derechos laborales y disposiciones sobre la propiedad de la tierra.
+
+PREGUNTAS
+1. ¿En qué año comenzó la Revolución Mexicana?
+2. ¿Qué régimen se cuestionaba al inicio?
+3. ¿En qué año se promulgó la Constitución relacionada con el proceso revolucionario?
+
+RESPUESTAS
+1. 1910.
+2. El Porfiriato.
+3. 1917.`
+  },
+  {
+    nivel:"Universidad", grado:"Ciencias de la salud", materia:"Biología",
+    titulo:"Introducción a la biología celular", tema:"universidad célula biología",
+    contenido:`INTRODUCCIÓN A LA BIOLOGÍA CELULAR
+
+La biología celular estudia la estructura, función y procesos de las células.
+
+Conceptos clave:
+- Membrana plasmática: barrera selectiva que regula el transporte.
+- Metabolismo: conjunto de reacciones químicas de la célula.
+- Homeostasis: mantenimiento de condiciones internas relativamente estables.
+- Expresión génica: uso de la información genética para producir ARN y, en muchos casos, proteínas.
+
+PARA REPASAR
+1. Explica la función de la membrana plasmática.
+2. ¿Qué significa homeostasis?
+3. Distingue metabolismo y expresión génica.
+
+RESPUESTAS ORIENTATIVAS
+1. Regula el intercambio de sustancias y la comunicación celular.
+2. Mantener condiciones internas estables.
+3. El metabolismo reúne reacciones químicas; la expresión génica utiliza información del ADN para generar productos funcionales.`
+  },
+  {
+    nivel:"Universidad", grado:"Ingeniería y tecnología", materia:"Matemáticas",
+    titulo:"Cálculo: límites básicos", tema:"universidad cálculo límites",
+    contenido:`LÍMITES BÁSICOS
+
+Un límite describe el valor al que se aproxima una función cuando la variable se acerca a un punto.
+
+Ejemplo:
+lim(x→2) (x + 3) = 5.
+
+Para funciones continuas sencillas, sustituir directamente puede bastar.
+
+Ejemplo:
+lim(x→3) (2x + 1) = 7.
+
+PRACTICA
+1. lim(x→4) (x + 2)
+2. lim(x→2) (3x - 1)
+3. lim(x→1) (x² + 2)
+
+RESPUESTAS
+1. 6
+2. 5
+3. 3`
+  },
+  {
+    nivel:"Universidad", grado:"Ciencias sociales", materia:"Historia",
+    titulo:"Cómo analizar una fuente histórica", tema:"universidad historia fuentes",
+    contenido:`ANÁLISIS DE FUENTES HISTÓRICAS
+
+Una fuente histórica es un material que permite investigar el pasado. Puede ser primaria —producida en la época estudiada— o secundaria —elaborada posteriormente a partir de otras fuentes—.
+
+Pasos de análisis:
+1. Identifica autor, fecha y contexto.
+2. Determina el propósito y el público.
+3. Distingue hechos, opiniones y posibles sesgos.
+4. Compara la fuente con otras evidencias.
+5. Explica qué permite conocer y cuáles son sus límites.
+
+PRACTICA
+Analiza una carta antigua: ¿quién la escribió?, ¿cuándo?, ¿para quién?, ¿qué información ofrece y qué podría omitir?
+
+No existe una única respuesta: justifica tus conclusiones con evidencia de la fuente.`
+  }
+];
+
+const nivel = document.getElementById("nivel");
+const grado = document.getElementById("grado");
+const materia = document.getElementById("materia");
+const buscar = document.getElementById("buscar");
+const contenedor = document.getElementById("guias");
+const contador = document.getElementById("contador");
+
+function actualizarOpciones() {
+  const n = nivel.value;
+  const grados = [...new Set(datos.filter(d => n === "Todos" || d.nivel === n).map(d => d.grado))];
+  grado.innerHTML = '<option value="Todos">Todos los grados</option>';
+  grados.forEach(g => grado.add(new Option(g, g)));
+
+  const materias = [...new Set(datos.filter(d => n === "Todos" || d.nivel === n).map(d => d.materia))].sort();
+  materia.innerHTML = '<option value="Todas">Todas las materias</option>';
+  materias.forEach(m => materia.add(new Option(m, m)));
+}
+
+function mostrarGuias() {
+  const resultados = datos.filter(d =>
+    (nivel.value === "Todos" || d.nivel === nivel.value) &&
+    (grado.value === "Todos" || d.grado === grado.value) &&
+    (materia.value === "Todas" || d.materia === materia.value) &&
+    (d.titulo + " " + d.tema + " " + d.contenido).toLowerCase().includes(buscar.value.toLowerCase())
+  );
+
+  contenedor.innerHTML = "";
+  contador.textContent = resultados.length + (resultados.length === 1 ? " guía encontrada" : " guías encontradas");
+
+  if (!resultados.length) {
+    contenedor.innerHTML = '<p class="empty">No encontramos guías con esos filtros. Prueba otra búsqueda o crea una guía personalizada.</p>';
+    return;
+  }
+
+  resultados.forEach((d, i) => {
+    const tarjeta = document.createElement("article");
+    tarjeta.className = "guide";
+
+    const titulo = document.createElement("h3");
+    titulo.textContent = d.titulo;
+
+    const etiqueta = document.createElement("p");
+    etiqueta.className = "tag";
+    etiqueta.textContent = d.nivel + " · " + d.grado + " · " + d.materia;
+
+    const resumen = document.createElement("p");
+    resumen.textContent = "Guía de estudio con explicación y práctica.";
+
+    const boton = document.createElement("button");
+    boton.textContent = "Leer guía";
+    boton.addEventListener("click", () => {
+      const panel = tarjeta.querySelector(".content");
+      const abierto = panel.style.display === "block";
+      panel.style.display = abierto ? "none" : "block";
+      boton.textContent = abierto ? "Leer guía" : "Ocultar guía";
+    });
+
+    const copiar = document.createElement("button");
+    copiar.className = "secondary";
+    copiar.textContent = "Copiar guía";
+    copiar.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(d.titulo + "\n\n" + d.contenido);
+        copiar.textContent = "¡Copiada!";
+        setTimeout(() => copiar.textContent = "Copiar guía", 1500);
+      } catch {
+        const area = document.createElement("textarea");
+        area.value = d.titulo + "\n\n" + d.contenido;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+        copiar.textContent = "¡Copiada!";
+      }
+    });
+
+    const contenido = document.createElement("div");
+    contenido.className = "content";
+    contenido.textContent = d.contenido;
+
+    tarjeta.append(titulo, etiqueta, resumen, boton, copiar, contenido);
+    contenedor.appendChild(tarjeta);
+  });
+}
+
+nivel.addEventListener("change", () => {
+  actualizarOpciones();
+  mostrarGuias();
+});
+grado.addEventListener("change", mostrarGuias);
+materia.addEventListener("change", mostrarGuias);
+buscar.addEventListener("input", mostrarGuias);
+
+actualizarOpciones();
+mostrarGuias();
+</script>
+</body>
+</html>
