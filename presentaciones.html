@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presentaciones IA | Impulso IA</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:#f4f5ff;font-family:Arial,sans-serif;padding:22px;line-height:1.6}
+main{max-width:850px;margin:30px auto}
+a{color:#b9a9ff;text-decoration:none}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.2}
+p{color:#c2c8dd}
+.panel{background:#151d33;border:1px solid #303b5b;border-radius:18px;padding:22px;margin:20px 0}
+label{display:block;font-weight:bold;margin:15px 0 8px}
+input,textarea,select{width:100%;padding:13px;border:1px solid #424d6c;border-radius:10px;background:#0d1428;color:white;font:inherit}
+textarea{min-height:100px;resize:vertical}
+button{border:0;border-radius:10px;padding:13px 18px;background:#7657ff;color:white;font-weight:bold;cursor:pointer;margin-top:14px}
+button:disabled{opacity:.5;cursor:wait}
+#resultado{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8}
+.small{font-size:13px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.slide{padding:18px;margin:14px 0;border:1px solid #39466a;border-radius:12px;background:#10182c}
+.slide h3{color:#c4b5fd;margin-top:0}
+@media print{body{background:white;color:#111;padding:0}a,.panel.formulario,.actions,#estado{display:none!important}main{margin:0;max-width:none}.panel{background:white;color:#111;border:0}.slide{break-inside:avoid;background:white;color:#111;border:1px solid #aaa}.slide h3,p{color:#111}}
+</style>
+</head>
+<body>
+<main>
+<a href="index.html">← Volver a Impulso IA</a>
+<h1>🎞️ Generador de presentaciones con IA</h1>
+<p>Crea el contenido de una exposición organizado por diapositivas. Después podrás copiarlo o imprimirlo como PDF.</p>
+
+<section class="panel formulario">
+<label for="tema">¿Sobre qué será la presentación?</label>
+<input id="tema" maxlength="300" placeholder="Ejemplo: La importancia de la inteligencia artificial">
+
+<label for="publico">¿Para quién es?</label>
+<select id="publico">
+<option>Estudiantes de secundaria</option>
+<option>Estudiantes de preparatoria</option>
+<option>Universidad</option>
+<option>Trabajo y negocios</option>
+<option>Público general</option>
+</select>
+
+<label for="cantidad">Número de diapositivas</label>
+<select id="cantidad">
+<option value="5">5 diapositivas</option>
+<option value="7" selected>7 diapositivas</option>
+<option value="10">10 diapositivas</option>
+<option value="12">12 diapositivas</option>
+</select>
+
+<label for="estilo">Estilo</label>
+<select id="estilo">
+<option>Educativo y claro</option>
+<option>Profesional</option>
+<option>Creativo y dinámico</option>
+<option>Científico y detallado</option>
+</select>
+
+<label for="detalles">Indicaciones adicionales (opcional)</label>
+<textarea id="detalles" maxlength="1500" placeholder="Ejemplo: incluye ejemplos, datos importantes y una conclusión."></textarea>
+
+<button id="generar">✨ Crear presentación</button>
+<p id="estado" role="status" class="small"></p>
+</section>
+
+<section class="panel">
+<h2>Tu presentación</h2>
+<div id="resultado">Aquí aparecerá el contenido de tus diapositivas.</div>
+<div class="actions">
+<button id="copiar" hidden>📋 Copiar contenido</button>
+<button id="imprimir" hidden>🖨️ Imprimir / Guardar PDF</button>
+</div>
+<p class="small">Consejo: revisa los datos generados antes de presentar tu trabajo.</p>
+</section>
+</main>
+
+<script>
+const API="https://impulso-ia-api.damiannava201014.workers.dev";
+const tema=document.getElementById("tema");
+const publico=document.getElementById("publico");
+const cantidad=document.getElementById("cantidad");
+const estilo=document.getElementById("estilo");
+const detalles=document.getElementById("detalles");
+const generar=document.getElementById("generar");
+const estado=document.getElementById("estado");
+const resultado=document.getElementById("resultado");
+const copiar=document.getElementById("copiar");
+const imprimir=document.getElementById("imprimir");
+
+generar.addEventListener("click",async()=>{
+ const t=tema.value.trim();
+ if(!t){estado.textContent="Escribe primero el tema de la presentación.";tema.focus();return}
+ generar.disabled=true;
+ copiar.hidden=true;
+ imprimir.hidden=true;
+ resultado.textContent="";
+ estado.textContent="Preparando tus diapositivas...";
+ const mensaje=`Crea el contenido de una presentación en español sobre: ${t}.
+Público: ${publico.value}.
+Número exacto de diapositivas: ${cantidad.value}.
+Estilo: ${estilo.value}.
+Indicaciones adicionales: ${detalles.value.trim()||"No hay indicaciones adicionales"}.
+Devuelve texto claro y listo para organizar en diapositivas.
+Usa exactamente ${cantidad.value} secciones, con el formato:
+DIAPOSITIVA 1: Título
+OBJETIVO: ...
+PUNTOS CLAVE:
+- ...
+- ...
+NOTAS PARA EXPONER: ...
+La primera diapositiva debe ser una portada y la última una conclusión.
+No inventes estadísticas ni fuentes. Si mencionas datos específicos, indica cuando deban verificarse.`;
+ try{
+  const res=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mensaje})});
+  if(!res.ok)throw new Error("Error del servidor: "+res.status);
+  const data=await res.json();
+  const texto=data.respuesta??data.choices?.[0]?.message?.content??data.response??data.reply??data.text??data.mensaje??data.result;
+  if(!texto)throw new Error("No se encontró el texto de la respuesta.");
+  resultado.textContent=texto;
+  estado.textContent="¡Presentación creada! Revisa el contenido antes de usarlo.";
+  copiar.hidden=false;
+  imprimir.hidden=false;
+ }catch(e){
+  estado.textContent="No se pudo crear la presentación: "+e.message;
+ }finally{generar.disabled=false}
+});
+copiar.addEventListener("click",async()=>{
+ try{await navigator.clipboard.writeText(resultado.textContent);estado.textContent="Contenido copiado."}
+ catch{estado.textContent="No se pudo copiar automáticamente. Selecciona el texto y cópialo manualmente."}
+});
+imprimir.addEventListener("click",()=>window.print());
+</script>
+</body>
+</html>
