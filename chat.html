@@ -111,7 +111,9 @@
 
   <script>
     const API = "https://impulso-ia-api.damiannava201014.workers.dev";
-    let historial = [];
+    let historial = JSON.parse(
+  localStorage.getItem("impulsoIAHistorial") || "[]"
+);
     const form = document.getElementById("form");
     const promptInput = document.getElementById("prompt");
     const messages = document.getElementById("messages");
@@ -125,7 +127,13 @@
       messages.scrollTop = messages.scrollHeight;
       return item;
     }
-
+    historial.forEach((mensaje) => {
+      if (mensaje.role === "user") {
+        addMessage(mensaje.content, "user");
+      } else if (mensaje.role === "assistant") {
+        addMessage(mensaje.content);
+      }
+    });
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const mensaje = promptInput.value.trim();
@@ -167,8 +175,18 @@ const respuesta =
             ? JSON.stringify(respuesta)
             : "El servidor respondió, pero no encontré el texto de la respuesta.";
         if (typeof respuesta === "string" && respuesta.trim()) {
+  if (typeof respuesta === "string" && respuesta.trim()) {
   historial.push({ role: "user", content: mensaje });
   historial.push({ role: "assistant", content: respuesta });
+
+  try {
+    localStorage.setItem(
+      "impulsoIAHistorial",
+      JSON.stringify(historial)
+    );
+  } catch (error) {
+    console.warn("No se pudo guardar el historial:", error);
+  }
 }
       } catch (error) {
         waiting.className = "message";
