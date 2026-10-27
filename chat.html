@@ -188,10 +188,7 @@ const respuesta =
             console.warn("No se pudo guardar el historial:", error);
           }
         }
-  } catch (error) {
-    console.warn("No se pudo guardar el historial:", error);
-  }
-}
+
       } catch (error) {
         waiting.className = "message";
         waiting.textContent = "Error: " + error.message;
