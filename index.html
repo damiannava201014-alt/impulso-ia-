@@ -337,7 +337,9 @@
     <span class="prompt-hint" id="inicio-estado">Tu siguiente idea empieza aquí.</span>
     <button class="primary" id="inicio-enviar" type="button">Enviar ↑</button>
   </div>
-  <div id="inicio-respuesta" style="display:none; margin-top:18px; padding:14px; border-top:1px solid #303039; white-space:pre-wrap; line-height:1.7;"></div>
+  <div id="inicio-respuesta" style="display:none; margin-top:18px; padding:14px; border-top:1px solid #303039; line-height:1.7;">
+  <div id="inicio-conversacion"></div>
+</div>
 </div>
 
         <h2 class="section-heading">Explora tus herramientas</h2>
@@ -418,7 +420,10 @@
       const response = await fetch(inicioAPI, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mensaje, historial: [] })
+        body: JSON.stringify({
+  mensaje,
+  historial: JSON.parse(sessionStorage.getItem("impulso-inicio-historial") || "[]")
+})
       });
 
       const data = await response.json();
@@ -436,12 +441,46 @@
         data.mensaje ??
         data.result;
 
-      inicioRespuesta.textContent =
-        typeof respuesta === "string"
-          ? respuesta
-          : "No se encontró el texto de la respuesta.";
+     
+const textoRespuesta =
+  typeof respuesta === "string"
+    ? respuesta
+    : "No se encontró el texto de la respuesta.";
+
+const historialInicio = JSON.parse(
+  sessionStorage.getItem("impulso-inicio-historial") || "[]"
+);
+
+historialInicio.push(
+  { role: "user", content: mensaje },
+  { role: "assistant", content: textoRespuesta }
+);
+
+sessionStorage.setItem(
+  "impulso-inicio-historial",
+  JSON.stringify(historialInicio)
+);
+
+const conversacion = document.getElementById("inicio-conversacion");
+conversacion.innerHTML = "";
+
+historialInicio.forEach((item) => {
+  const burbuja = document.createElement("div");
+  burbuja.style.margin = "12px 0";
+  burbuja.style.padding = "12px";
+  burbuja.style.borderRadius = "10px";
+  burbuja.style.background =
+    item.role === "user" ? "#252535" : "#191923";
+  burbuja.style.whiteSpace = "pre-wrap";
+  burbuja.textContent =
+    (item.role === "user" ? "Tú: " : "Impulso IA: ") +
+    item.content;
+  conversacion.appendChild(burbuja);
+});
+
 
       inicioEstado.textContent = "Puedes escribir otra pregunta";
+      inicioPrompt.value = "";
       inicioPrompt.value = "";
     } catch (error) {
       inicioRespuesta.textContent =
