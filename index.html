@@ -331,13 +331,14 @@
           </p>
         </section>
 
-        <form class="prompt-box" action="chat.html" method="get">
-          <input type="text" name="mensaje" placeholder="Escribe lo que quieres hacer..." aria-label="Escribe lo que quieres hacer">
-          <div class="prompt-actions">
-            <span class="prompt-hint">Tu siguiente idea empieza aquí.</span>
-            <button class="primary" type="submit">Abrir chat ↗</button>
-          </div>
-        </form>
+        <div class="prompt-box">
+  <input id="inicio-prompt" type="text" placeholder="Escribe lo que quieres hacer..." aria-label="Escribe lo que quieres hacer">
+  <div class="prompt-actions">
+    <span class="prompt-hint" id="inicio-estado">Tu siguiente idea empieza aquí.</span>
+    <button class="primary" id="inicio-enviar" type="button">Enviar ↑</button>
+  </div>
+  <div id="inicio-respuesta" style="display:none; margin-top:18px; padding:14px; border-top:1px solid #303039; white-space:pre-wrap; line-height:1.7;"></div>
+</div>
 
         <h2 class="section-heading">Explora tus herramientas</h2>
         <div class="tools">
@@ -394,5 +395,71 @@
 
   <script async="async" data-cfasync="false" src="https://bauval.org/21/56aa9391af959899d19dd7d65721a3e2"></script>
   <div id="container-56aa9391af959899d19dd7d65721a3e2"></div>
+  <script>
+  const inicioAPI = "https://impulso-ia-api.damiannava201014.workers.dev";
+  const inicioPrompt = document.getElementById("inicio-prompt");
+  const inicioEnviar = document.getElementById("inicio-enviar");
+  const inicioRespuesta = document.getElementById("inicio-respuesta");
+  const inicioEstado = document.getElementById("inicio-estado");
+
+  inicioEnviar.addEventListener("click", async () => {
+    const mensaje = inicioPrompt.value.trim();
+    if (!mensaje) {
+      inicioPrompt.focus();
+      return;
+    }
+
+    inicioRespuesta.style.display = "block";
+    inicioRespuesta.textContent = "Pensando...";
+    inicioEstado.textContent = "Impulso IA está respondiendo";
+    inicioEnviar.disabled = true;
+
+    try {
+      const response = await fetch(inicioAPI, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensaje, historial: [] })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Error del servidor: " + response.status);
+      }
+
+      const respuesta =
+        data.respuesta ??
+        data.choices?.[0]?.message?.content ??
+        data.response ??
+        data.reply ??
+        data.text ??
+        data.mensaje ??
+        data.result;
+
+      inicioRespuesta.textContent =
+        typeof respuesta === "string"
+          ? respuesta
+          : "No se encontró el texto de la respuesta.";
+
+      inicioEstado.textContent = "Puedes escribir otra pregunta";
+      inicioPrompt.value = "";
+    } catch (error) {
+      inicioRespuesta.textContent =
+        "No pude conectar con Impulso IA. Inténtalo de nuevo.";
+      inicioEstado.textContent = "Error de conexión";
+      console.error(error);
+    } finally {
+      inicioEnviar.disabled = false;
+      inicioPrompt.focus();
+    }
+  });
+
+  inicioPrompt.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      inicioEnviar.click();
+    }
+  });
+</script>
 </body>
 </html>
