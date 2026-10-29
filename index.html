@@ -115,6 +115,33 @@
   color: #ffffff;
 }
 
+/* Tarjetas modernas para el centro de herramientas */
+#centro-herramientas a {
+  display: block;
+  background: linear-gradient(145deg, #172554, #17152f) !important;
+  border: 1px solid #34445f !important;
+  border-radius: 18px !important;
+  padding: 24px !important;
+  text-align: left;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+#centro-herramientas a:hover {
+  transform: translateY(-5px);
+  border-color: #8b5cf6 !important;
+  box-shadow: 0 12px 30px rgba(108, 76, 255, 0.2);
+}
+
+#centro-herramientas a h3 {
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+#centro-herramientas a p {
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
   </style>
   
 <script type="application/ld+json">
@@ -268,11 +295,13 @@
   </footer>
   
 <!-- Centro de herramientas de Impulso IA -->
-<section style="max-width:1000px; margin:40px auto; padding:24px 16px; text-align:center; font-family:Arial,sans-serif;">
+
+<section id="centro-herramientas" style="max-width:1000px; margin:40px auto; padding:24px 16px; text-align:center; font-family:Arial,sans-serif;">
+
   <h2 style="font-size:28px; margin-bottom:10px;">🚀 Centro de herramientas IA</h2>
   <p style="margin-bottom:25px;">Todo lo que necesitas para aprender, crear y trabajar.</p>
 
-  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:16px;">
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:16px;">  
 
     <a href="chat.html" style="padding:22px; border-radius:14px; background:#172554; border:1px solid #334155; color:white; text-decoration:none;">
       <div style="font-size:30px;">🤖</div>
