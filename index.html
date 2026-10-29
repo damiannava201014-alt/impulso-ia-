@@ -2,412 +2,397 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta name="google-site-verification" content="PLi96H5VuPXcpLsRLYNBFoHF1ydNRNzig8MHEU45fpM" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Aprende inteligencia artificial con Impulso IA. Descubre herramientas gratuitas, tutoriales y recursos para tus proyectos digitales.">
-  <meta name="theme-color" content="#0b1020">
-  <title>Impulso IA | Aprende, crea y crece</title>
+  <meta name="google-site-verification" content="PLi96H5VuPXcpLsRLYNBFoHF1ydNRNzig8MHEU45fpM" />
+  <meta name="description" content="Impulso IA: tu espacio para conversar con inteligencia artificial, crear imágenes, estudiar y trabajar con herramientas gratuitas.">
+  <meta name="theme-color" content="#101014">
+  <title>Impulso IA | Tu espacio de inteligencia artificial</title>
   <style>
     * { box-sizing: border-box; }
+    :root {
+      --bg: #101014;
+      --sidebar: #17171c;
+      --panel: #202027;
+      --border: #303039;
+      --text: #f5f5f7;
+      --muted: #a1a1ad;
+      --blue: #60a5fa;
+      --purple: #a78bfa;
+    }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
+      background: var(--bg);
+      color: var(--text);
       font-family: Arial, sans-serif;
-      background: #0b1020;
-      color: #f1f5f9;
-      line-height: 1.7;
     }
     a { color: inherit; text-decoration: none; }
-    .container { width: min(1080px, 90%); margin: auto; }
-    header {
-      position: sticky; top: 0; z-index: 10;
-      background: #0b1020ee;
-      border-bottom: 1px solid #26334c;
-      backdrop-filter: blur(12px);
+    button, input { font: inherit; }
+    .app { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      padding: 22px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
     }
-    nav {
-      min-height: 72px;
-      display: flex; align-items: center;
-      justify-content: space-between; gap: 20px;
+    .brand {
+      padding: 8px 10px;
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -.5px;
     }
-    .logo { font-size: 22px; font-weight: 800; color: #60a5fa; }
-    .links { display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; }
-    .links a:hover { color: #60a5fa; }
-    .hero { padding: 95px 0 85px; text-align: center; }
-    .tag {
-      display: inline-block; padding: 6px 14px;
-      border: 1px solid #31518b; border-radius: 30px;
-      color: #93c5fd; font-size: 13px;
-    }
-    h1 { font-size: clamp(38px, 7vw, 68px); line-height: 1.12; margin: 24px 0; }
-    h2 { font-size: clamp(26px, 4vw, 38px); line-height: 1.25; }
-    .gradient {
-      background: linear-gradient(90deg, #60a5fa, #c084fc);
-      -webkit-background-clip: text; background-clip: text;
+    .brand span {
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      -webkit-background-clip: text;
+      background-clip: text;
       color: transparent;
     }
-    .intro { max-width: 650px; margin: 0 auto 28px; color: #b8c4d8; }
-    .button {
-      display: inline-block; padding: 12px 20px;
-      background: #2563eb; color: white;
-      border-radius: 9px; font-weight: bold; margin: 5px;
+    .new-chat {
+      display: block;
+      padding: 13px 14px;
+      border: 1px solid #41414d;
+      border-radius: 12px;
+      background: #24242c;
+      font-weight: 600;
+      transition: .2s;
     }
-    .button:hover { background: #1d4ed8; }
-    .button.secondary { background: #172033; border: 1px solid #34445f; }
-    section { padding: 65px 0; }
-    .section-intro { color: #aab7cb; max-width: 650px; }
-    .grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 18px; margin-top: 28px;
+    .new-chat:hover, .tool-link:hover {
+      background: #30303b;
+      border-color: #7063b8;
     }
-    .card {
-      padding: 24px; border: 1px solid #26334c;
-      border-radius: 16px; background: #111a2d;
+    .side-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      padding: 0 10px;
+      margin-bottom: 8px;
     }
-    .card .icon { font-size: 30px; }
-    .card p { color: #b8c4d8; font-size: 15px; }
-    .card a { color: #93c5fd; font-weight: bold; }
-    .label { color: #60a5fa; font-size: 12px; font-weight: bold; }
-    .highlight {
-      background: linear-gradient(135deg, #14264a, #17152f);
-      border: 1px solid #34445f; border-radius: 20px;
-      padding: 32px;
+    .tool-link {
+      display: block;
+      padding: 10px;
+      margin: 3px 0;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      color: #dedee6;
+      font-size: 14px;
+      transition: .2s;
     }
-    .steps { padding-left: 22px; color: #c6d1e2; }
-    footer {
-      padding: 30px 0; border-top: 1px solid #26334c;
-      color: #94a3b8; font-size: 13px;
+    .side-bottom {
+      margin-top: auto;
+      padding: 12px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
     }
-    @media (max-width: 700px) {
-      .grid { grid-template-columns: 1fr; }
-      nav { padding: 14px 0; align-items: flex-start; flex-direction: column; }
-      .links { gap: 12px; }
-      .hero { padding: 65px 0; }
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
     }
-    
-/* Mejoras visuales de Impulso IA */
-.card {
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  border-color: #6c5ce7;
-  box-shadow: 0 16px 35px rgba(37, 99, 235, 0.14);
-}
-
-.button {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.25);
-}
-
-.links a {
-  transition: color 0.2s ease;
-}
-
-::selection {
-  background: #6c5ce7;
-  color: #ffffff;
-}
-
-/* Tarjetas modernas para el centro de herramientas */
-#centro-herramientas a {
-  display: block;
-  background: linear-gradient(145deg, #172554, #17152f) !important;
-  border: 1px solid #34445f !important;
-  border-radius: 18px !important;
-  padding: 24px !important;
-  text-align: left;
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-#centro-herramientas a:hover {
-  transform: translateY(-5px);
-  border-color: #8b5cf6 !important;
-  box-shadow: 0 12px 30px rgba(108, 76, 255, 0.2);
-}
-
-#centro-herramientas a h3 {
-  color: #ffffff;
-  margin-bottom: 8px;
-}
-
-#centro-herramientas a p {
-  color: #cbd5e1;
-  font-size: 14px;
-}
-
+    .topbar {
+      height: 66px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #24242b;
+    }
+    .topbar-title { font-weight: 600; }
+    .top-tag {
+      color: #d6caff;
+      background: #28213c;
+      border: 1px solid #443660;
+      border-radius: 20px;
+      padding: 7px 12px;
+      font-size: 12px;
+    }
+    .content {
+      width: min(900px, 100%);
+      margin: 0 auto;
+      padding: 65px 28px 35px;
+      flex: 1;
+    }
+    .welcome { text-align: center; margin-bottom: 34px; }
+    .logo-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      border-radius: 19px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      font-size: 28px;
+      box-shadow: 0 8px 35px #5b21b633;
+    }
+    h1 {
+      font-size: clamp(29px, 4vw, 43px);
+      letter-spacing: -1.3px;
+      margin: 22px 0 10px;
+    }
+    .gradient {
+      background: linear-gradient(90deg, #60a5fa, #c084fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .subtitle {
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto;
+      font-size: 15px;
+    }
+    .prompt-box {
+      padding: 14px;
+      background: #202027;
+      border: 1px solid #41414c;
+      border-radius: 19px;
+      box-shadow: 0 10px 40px #00000020;
+    }
+    .prompt-box:focus-within {
+      border-color: #7770bc;
+      box-shadow: 0 0 0 3px #8b5cf622;
+    }
+    .prompt-box input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      padding: 8px 6px 15px;
+      font-size: 15px;
+    }
+    .prompt-box input::placeholder { color: #92929f; }
+    .prompt-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .prompt-hint { color: var(--muted); font-size: 12px; }
+    .primary {
+      display: inline-block;
+      padding: 11px 17px;
+      border: 0;
+      border-radius: 11px;
+      color: white;
+      font-weight: 700;
+      background: linear-gradient(100deg, #2563eb, #7c3aed);
+      cursor: pointer;
+      transition: transform .2s, opacity .2s;
+    }
+    .primary:hover { transform: translateY(-2px); opacity: .92; }
+    .section-heading {
+      margin: 43px 0 16px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+    .tool-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      min-height: 105px;
+      padding: 17px;
+      background: #19191f;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      transition: transform .2s, background .2s, border-color .2s;
+    }
+    .tool-card:hover {
+      transform: translateY(-3px);
+      background: #22222b;
+      border-color: #64549b;
+    }
+    .tool-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #233d70, #3c285f);
+      font-size: 21px;
+    }
+    .tool-card h3 { margin: 2px 0 6px; font-size: 14px; }
+    .tool-card p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .footer {
+      padding: 22px;
+      text-align: center;
+      color: #858591;
+      font-size: 12px;
+      line-height: 1.8;
+      border-top: 1px solid #24242b;
+    }
+    .footer a { color: #a5b4fc; }
+    @media (max-width: 760px) {
+      .sidebar { width: 205px; padding: 16px 10px; }
+      .content { padding: 45px 20px 30px; }
+      .topbar { padding: 0 20px; }
+    }
+    @media (max-width: 560px) {
+      .app { display: block; }
+      .sidebar {
+        width: 100%;
+        padding: 12px 14px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        gap: 10px;
+      }
+      .brand { padding: 5px 3px; }
+      .new-chat { padding: 10px 12px; }
+      .sidebar-tools {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+      .side-label, .side-bottom { display: none; }
+      .tool-link {
+        flex-shrink: 0;
+        margin: 0;
+        padding: 8px 10px;
+        background: #22222a;
+        font-size: 12px;
+      }
+      .topbar { height: 55px; }
+      .content { padding: 38px 16px 28px; }
+      .tools { grid-template-columns: 1fr; }
+      .tool-card { min-height: 90px; }
+      .welcome { margin-bottom: 28px; }
+    }
   </style>
-  
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Impulso IA",
-  "alternateName": "Impulso IA",
-  "url": "https://damiannava201014-alt.github.io/impulso-ia-/"
-}
-</script>
-
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Impulso IA",
+    "alternateName": "Impulso IA",
+    "url": "https://damiannava201014-alt.github.io/impulso-ia-/"
+  }
+  </script>
 </head>
 <body>
-  <header>
-    <nav class="container">
-      <a class="logo" href="#inicio">✦ IMPULSO IA</a>
-      <div class="links">
-        <a href="#herramientas">Herramientas</a>
-        <a href="#guias">Guías</a>
-        <a href="#servicios">Servicios</a>
-        <a href="#contacto">Contacto</a>
+  <div class="app">
+    <aside class="sidebar">
+      <a class="brand" href="index.html">✦ <span>IMPULSO IA</span></a>
+      <a class="new-chat" href="chat.html">＋ Nuevo chat</a>
+
+      <div>
+        <div class="side-label">TUS HERRAMIENTAS</div>
+        <nav class="sidebar-tools">
+          <a class="tool-link" href="chat.html">🤖 Chat con IA</a>
+          <a class="tool-link" href="imagenes.html">🎨 Crear imágenes</a>
+          <a class="tool-link" href="textos.html">✍️ Generar textos</a>
+          <a class="tool-link" href="traductor.html">🌎 Traductor</a>
+          <a class="tool-link" href="resumidor.html">📄 Resumidor</a>
+          <a class="tool-link" href="estudio.html">🧠 Asistente de estudio</a>
+          <a class="tool-link" href="pdf.html">📚 Lector de PDF</a>
+          <a class="tool-link" href="guias.html">🎓 Guías escolares</a>
+          <a class="tool-link" href="presentaciones.html">🎞️ Presentaciones</a>
+          <a class="tool-link" href="biblioteca.html">📖 Biblioteca escolar</a>
+        </nav>
       </div>
-    </nav>
-  </header>
 
-  <main>
-    <section class="hero container" id="inicio">
-      <span class="tag">TECNOLOGÍA · CREATIVIDAD · FUTURO</span>
-      <h1>Haz más con la<br><span class="gradient">inteligencia artificial.</span></h1>
-      <p class="intro">
-        Descubre herramientas, aprende nuevas habilidades y convierte
-        tus ideas en proyectos digitales. La tecnología puede ser
-        más sencilla de lo que imaginas.
-      </p>
-      <a class="button" href="#herramientas">Explorar herramientas →</a>
-      <a class="button secondary" href="#guias">Aprender gratis</a>
-    </section>
-
-    <section id="herramientas">
-      <div class="container">
-        <span class="label">EMPIEZA AQUÍ</span>
-        <h2>Herramientas que vale la pena conocer</h2>
-        <p class="section-intro">
-          Recursos conocidos para estudiar, investigar y desarrollar
-          proyectos. Comprueba las condiciones de cada servicio.
-        </p>
-        <div class="grid">
-          <article class="card">
-            <div class="icon">🤖</div>
-            <h3>ChatGPT</h3>
-            <p>Explora ideas, comprende conceptos y prepara borradores
-              con ayuda de inteligencia artificial.</p>
-            <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">Visitar herramienta →</a>
-          </article>
-          <article class="card">
-            <div class="icon">🎨</div>
-            <h3>Canva</h3>
-            <p>Crea diseños, presentaciones y materiales visuales
-              para tus proyectos.</p>
-            <a href="https://www.canva.com/" target="_blank" rel="noopener noreferrer">Visitar herramienta →</a>
-          </article>
-          <article class="card">
-            <div class="icon">💻</div>
-            <h3>GitHub</h3>
-            <p>Aprende sobre programación y descubre proyectos
-              tecnológicos de la comunidad.</p>
-            <a href="https://github.com/" target="_blank" rel="noopener noreferrer">Visitar herramienta →</a>
-          </article>
-        </div>
+      <div class="side-bottom">
+        Una plataforma para aprender, crear y crecer.<br>
+        <a href="mailto:damiannava201014@gmail.com">Contacto y sugerencias</a>
       </div>
-    </section>
+    </aside>
 
-    <section id="guias">
-      <div class="container">
-        <span class="label">APRENDE A TU RITMO</span>
-        <h2>Guías prácticas de inteligencia artificial</h2>
-        <div class="grid">
-          <article class="card">
-            <div class="icon">✍️</div>
-            <h3>Cómo escribir mejores instrucciones para una IA</h3>
-            <p>Explica tu objetivo, aporta contexto, indica el formato
-              que necesitas y mejora el resultado con preguntas.</p>
-          </article>
-          <article class="card">
-            <div class="icon">📚</div>
-            <h3>Cómo estudiar con inteligencia artificial</h3>
-            <p>Pide explicaciones paso a paso, ejercicios de práctica
-              y preguntas para comprobar lo que has aprendido.</p>
-          </article>
-          <article class="card">
-            <div class="icon">📱</div>
-            <h3>Ideas de contenido para redes sociales</h3>
-            <p>Organiza temas, prepara calendarios de publicaciones
-              y adapta tus mensajes a cada audiencia.</p>
-          </article>
-        </div>
-        <p class="section-intro">
-          Estas son introducciones. Iremos desarrollando cada tema
-          con ejemplos originales y tutoriales más completos.
-        </p>
-      </div>
-    </section>
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-title">Inicio</div>
+        <div class="top-tag">✦ Tu espacio de IA</div>
+      </header>
 
-    <section id="servicios">
-      <div class="container">
-        <div class="highlight">
-          <span class="label">PROYECTOS DIGITALES</span>
-          <h2>¿Necesitas ayuda con tu contenido?</h2>
-          <p class="section-intro">
-            Estoy desarrollando recursos para ayudar a pequeños negocios
-            a organizar sus ideas y mejorar su presencia digital.
+      <div class="content">
+        <section class="welcome">
+          <div class="logo-mark">✦</div>
+          <h1>¿Qué vamos a crear <span class="gradient">hoy?</span></h1>
+          <p class="subtitle">
+            Bienvenido a Impulso IA. Conversa, aprende, crea imágenes
+            y descubre herramientas para llevar tus ideas más lejos.
           </p>
-          <div class="grid">
-            <article class="card">
-              <h3>Ideas para publicaciones</h3>
-              <p>Listas de temas adaptadas a la actividad de un negocio.</p>
-            </article>
-            <article class="card">
-              <h3>Textos para redes</h3>
-              <p>Borradores de textos que el cliente puede revisar y adaptar.</p>
-            </article>
-            <article class="card">
-              <h3>Calendarios de contenido</h3>
-              <p>Una planificación sencilla de temas y fechas de publicación.</p>
-            </article>
+        </section>
+
+        <form class="prompt-box" action="chat.html" method="get">
+          <input type="text" name="mensaje" placeholder="Escribe lo que quieres hacer..." aria-label="Escribe lo que quieres hacer">
+          <div class="prompt-actions">
+            <span class="prompt-hint">Tu siguiente idea empieza aquí.</span>
+            <button class="primary" type="submit">Abrir chat ↗</button>
           </div>
-          <p>¿Te interesa alguno de estos servicios? Próximamente añadiremos
-            una forma de contacto para solicitar información.</p>
+        </form>
+
+        <h2 class="section-heading">Explora tus herramientas</h2>
+        <div class="tools">
+          <a class="tool-card" href="chat.html">
+            <div class="tool-icon">🤖</div>
+            <div><h3>Chat con Impulso IA</h3><p>Haz preguntas, aprende y desarrolla tus ideas.</p></div>
+          </a>
+          <a class="tool-card" href="imagenes.html">
+            <div class="tool-icon">🎨</div>
+            <div><h3>Generador de imágenes</h3><p>Convierte descripciones en imágenes.</p></div>
+          </a>
+          <a class="tool-card" href="textos.html">
+            <div class="tool-icon">✍️</div>
+            <div><h3>Generador de textos</h3><p>Prepara borradores, historias y publicaciones.</p></div>
+          </a>
+          <a class="tool-card" href="traductor.html">
+            <div class="tool-icon">🌎</div>
+            <div><h3>Traductor</h3><p>Traduce textos a otros idiomas.</p></div>
+          </a>
+          <a class="tool-card" href="resumidor.html">
+            <div class="tool-icon">📄</div>
+            <div><h3>Resumidor</h3><p>Extrae ideas clave y resume documentos.</p></div>
+          </a>
+          <a class="tool-card" href="estudio.html">
+            <div class="tool-icon">🧠</div>
+            <div><h3>Asistente de estudio</h3><p>Practica ejercicios y aprende paso a paso.</p></div>
+          </a>
+          <a class="tool-card" href="pdf.html">
+            <div class="tool-icon">📚</div>
+            <div><h3>Lector de PDF</h3><p>Trabaja con tus documentos y sus ideas.</p></div>
+          </a>
+          <a class="tool-card" href="guias.html">
+            <div class="tool-icon">🎓</div>
+            <div><h3>Guías escolares</h3><p>Repasa temas y prepárate para tus exámenes.</p></div>
+          </a>
+          <a class="tool-card" href="presentaciones.html">
+            <div class="tool-icon">🎞️</div>
+            <div><h3>Generador de presentaciones</h3><p>Organiza exposiciones por diapositivas.</p></div>
+          </a>
+          <a class="tool-card" href="biblioteca.html">
+            <div class="tool-icon">📖</div>
+            <div><h3>Biblioteca escolar</h3><p>Explora recursos por nivel, grado y materia.</p></div>
+          </a>
         </div>
       </div>
-    </section>
 
-    <section id="contacto">
-      <div class="container">
-        <h2>Seguimos aprendiendo</h2>
-        <p class="section-intro">
-          Impulso IA comparte recursos educativos sobre tecnología.
-          El sitio irá creciendo con nuevas guías y proyectos.
-        </p>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>© 2026 Impulso IA · Proyecto educativo independiente.</p>
-      <p>Las herramientas mencionadas pertenecen a sus respectivos propietarios.
-        Sus funciones y condiciones pueden cambiar.</p>
-    </div>
-  </footer>
-  
-<!-- Centro de herramientas de Impulso IA -->
-
-<section id="centro-herramientas" style="max-width:1000px; margin:40px auto; padding:24px 16px; text-align:center; font-family:Arial,sans-serif;">
-
-  <h2 style="font-size:28px; margin-bottom:10px;">🚀 Centro de herramientas IA</h2>
-  <p style="margin-bottom:25px;">Todo lo que necesitas para aprender, crear y trabajar.</p>
-
-  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:16px;">  
-
-    <a href="chat.html" style="padding:22px; border-radius:14px; background:#172554; border:1px solid #334155; color:white; text-decoration:none;">
-      <div style="font-size:30px;">🤖</div>
-      <h3>Chat con IA</h3>
-      <p>Pregunta, aprende y resuelve dudas.</p>
-    </a>
-
-    <a href="imagenes.html" style="padding:22px; border-radius:14px; background:#172554; border:1px solid #334155; color:white; text-decoration:none;">
-      <div style="font-size:30px;">🎨</div>
-      <h3>Generador de imágenes</h3>
-      <p>Convierte tus ideas en imágenes.</p>
-    </a>
-
-    <a href="textos.html" style="padding:22px; border-radius:14px; background:#172554; border:1px solid #334155; color:white; text-decoration:none;">
-      <div style="font-size:30px;">✍️</div>
-      <h3>Generador de textos</h3>
-      <p>Crea borradores, historias y publicaciones.</p>
-    </a>
-
-    <a href="traductor.html" style="padding:22px; border-radius:14px; background:#172554; border:1px solid #334155; color:white; text-decoration:none;">
-      <div style="font-size:30px;">🌎</div>
-      <h3>Traductor</h3>
-      <p>Traduce textos a otros idiomas.</p>
-    </a>
-
-    <a href="resumidor.html" style="padding:22px; border-radius:14px; background:#172554; border:1px solid #334155; color:white; text-decoration:none;">
-      <div style="font-size:30px;">📄</div>
-      <h3>Resumidor</h3>
-      <p>Resume textos y extrae ideas clave.</p>
-    </a>
-
-    <a href="estudio.html" style="padding:22px; border-radius:14px; background:#172554; border:1px solid #334155; color:white; text-decoration:none;">
-      <div style="font-size:30px;">🧠</div>
-      <h3>Asistente de estudio</h3>
-      <p>Aprende temas y practica ejercicios.</p>
-    </a>
-
-<a href="pdf.html" style="padding:22px; border-radius:14px; background:#172554; border:1px solid #334155; color:white; text-decoration:none;">
-  <div style="font-size:30px;">📚</div>
-  <h3>Lector de PDF inteligente</h3>
-  <p>Analiza documentos, crea resúmenes y responde preguntas.</p>
-</a>
-
-<a href="guias.html" style="padding:22px; border-radius:14px; background:#172554; border:1px solid #334155; color:white; text-decoration:none;">
-  <div style="font-size:30px;">📚</div>
-  <h3>Guías de estudio escolar</h3>
-  <p>Aprende y prepárate para tus exámenes desde primaria hasta la universidad.</p>
-</a>
-
-<a href="presentaciones.html" style="padding:22px; border-radius:14px; background:#172554; border:1px solid #334155; color:white; text-decoration:none;">
-  <div style="font-size:30px;">🎞️</div>
-  <h3>Generador de presentaciones</h3>
-  <p>Crea exposiciones organizadas por diapositivas.</p>
-</a>
-
-<a href="biblioteca.html" style="padding:22px; border-radius:14px; background:#172554; border:1px solid #334155; color:white; text-decoration:none;">
-  <div style="font-size:30px;">📚</div>
-  <h3>Biblioteca escolar gratuita</h3>
-  <p>Explora guías por nivel, grado y materia, y estudia gratis.</p>
-</a>
-
+      <footer class="footer">
+        © 2026 Impulso IA · Proyecto educativo independiente.<br>
+        Las herramientas externas pertenecen a sus respectivos propietarios.<br>
+        <a href="mailto:damiannava201014@gmail.com">Contactar por correo</a>
+      </footer>
+    </main>
   </div>
-</section>
-<!-- Fin del centro de herramientas -->
 
-<!-- Acceso al generador de imágenes de Impulso IA -->
-  
-<!-- Acceso al chat de Impulso IA -->
-<div style="text-align:center; margin:20px auto; padding:0 16px;">
-  <a href="chat.html" style="
-    display:inline-block;
-    padding:14px 24px;
-    background:#2563eb;
-    color:white;
-    text-decoration:none;
-    border-radius:12px;
-    font-weight:bold;
-    font-family:Arial,sans-serif;
-  ">🤖 Hablar con Impulso IA</a>
-</div>
-
-<div style="text-align:center; margin:30px auto; padding:0 16px;">
-  <a href="imagenes.html" style="
-    display:inline-block;
-    padding:14px 24px;
-    background:#6c4cff;
-    color:white;
-    text-decoration:none;
-    border-radius:12px;
-    font-weight:bold;
-    font-family:Arial,sans-serif;
-    box-shadow:0 4px 15px rgba(108,76,255,.25);
-  ">🎨 Crear imágenes con IA</a>
-</div>
-
-<section id="contacto" style="max-width:900px; margin:40px auto; padding:30px 20px; text-align:center; background:#172554; border:1px solid #334155; border-radius:16px; color:white;">
-  <div style="font-size:36px;">✉️</div>
-  <h2>¡Hablemos de Impulso IA!</h2>
-  <p>¿Tienes dudas, sugerencias o ideas para mejorar la plataforma? Me encantará escucharte.</p>
-  <a href="mailto:damiannava201014@gmail.com" style="display:inline-block; margin-top:12px; padding:12px 22px; background:#6c4cff; color:white; text-decoration:none; border-radius:10px; font-weight:bold;">
-    Escríbeme por correo
-  </a>
-</section>
-
-<script async="async" data-cfasync="false" src="https://bauval.org/21/56aa9391af959899d19dd7d65721a3e2"></script>
-<div id="container-56aa9391af959899d19dd7d65721a3e2"></div>
-
+  <script async="async" data-cfasync="false" src="https://bauval.org/21/56aa9391af959899d19dd7d65721a3e2"></script>
+  <div id="container-56aa9391af959899d19dd7d65721a3e2"></div>
 </body>
 </html>
